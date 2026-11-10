@@ -1,0 +1,46 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Lb from '../../../components/Lb.astro';
+import Steps from '../../../components/Steps.astro';
+import Source from '../../../components/Source.astro';
+import { remotes, getLearnButton, openersWithButton, openerHref, slugify, type Remote } from '../../../lib/data';
+import { getBrand } from '../../../lib/brands';
+import { amazonUrl } from '../../../lib/site';
+export function getStaticPaths() {
+  return remotes.map((r) => ({ params: { id: r.id }, props: { r } }));
+}
+const { r } = Astro.props as { r: Remote };
+const lbs = r.works_with_learn_buttons.map((id) => getLearnButton(id)).filter(Boolean);
+const brand = getBrand(slugify(r.brand));
+const steps = r.steps?.length ? r.steps : r.kind === 'keypad' ? brand?.steps.keypad : brand?.steps.remote;
+const ops = lbs.flatMap((l) => openersWithButton(l!.id));
+const kind = r.kind === 'keypad' ? 'Keypad' : 'Remote';
+---
+<Base title={`${r.brand} ${r.model} ${kind}: Programming and Compatibility`} description={`How to program the ${r.brand} ${r.model} ${kind.toLowerCase()}, which garage door openers and Learn button colours it works with${r.battery ? `, and its battery (${r.battery})` : ''}.`}>
+  <section>
+    <p class="crumbs"><a href="/remotes/">Remotes and keypads</a> / {r.brand} {r.model}</p>
+    <h1>{r.brand} {r.model} {kind.toLowerCase()}</h1>
+    <div class="card">
+      <dl class="facts">
+        <div><dt>Type</dt><dd>{r.kind}{r.buttons ? `, ${r.buttons} button${r.buttons > 1 ? 's' : ''}` : ''}</dd></div>
+        {r.battery && <div><dt>Battery</dt><dd class="mono">{r.battery}</dd></div>}
+        {r.works_with_brands.length > 0 && <div><dt>Opener brands</dt><dd>{r.works_with_brands.join(', ')}</dd></div>}
+      </dl>
+      {lbs.length > 0 && <div><p class="label">Works with these Learn buttons</p><p style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px">{lbs.map((l) => <Lb l={l!} />)}</p></div>}
+      <div class="btns"><a class="btn" href={amazonUrl(`${r.brand} ${r.model}`)} rel="sponsored nofollow noopener" target="_blank">Check price on Amazon</a>{r.battery && <a class="btn ghost" href={amazonUrl(`${r.battery} battery`)} rel="sponsored nofollow noopener" target="_blank">{r.battery} batteries</a>}</div>
+      <Source sample={r.sample} url={r.source_url} label={`${r.model} instructions`} />
+    </div>
+  </section>
+  {steps && steps.length > 0 && (
+    <section>
+      <h2>How to program the {r.model}</h2>
+      <Steps steps={steps} />
+    </section>
+  )}
+  {ops.length > 0 && (
+    <section>
+      <h2>Openers it works with</h2>
+      <ul class="link-grid">{ops.map((o) => <li><a class="mono" href={openerHref(o)}>{o.brand} {o.model}</a></li>)}</ul>
+    </section>
+  )}
+</Base>

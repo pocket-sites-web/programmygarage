@@ -1,0 +1,39 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import Steps from '../../../../components/Steps.astro';
+import Source from '../../../../components/Source.astro';
+import { getCarModels, yearSpan, type CarModel } from '../../../../lib/data';
+import { activeBrands } from '../../../../lib/brands';
+export function getStaticPaths() {
+  return getCarModels().map((m) => ({ params: { make: m.makeSlug, model: m.modelSlug }, props: { m } }));
+}
+const { m } = Astro.props as { m: CarModel };
+const span = yearSpan([m.firstYear, m.lastYear]);
+const siblings = getCarModels().filter((x) => x.make === m.make && x.model !== m.model);
+const sys = m.groups[0]?.system ?? 'HomeLink';
+---
+<Base title={`How to Program the Garage Door Opener in a ${m.make} ${m.model} (${span})`} description={`Program the ${sys} garage door buttons in your ${m.make} ${m.model} (${span}), step by step from the owner's manual, including the rolling-code Learn button step.`}>
+  <section>
+    <p class="crumbs"><a href="/cars/">Cars</a> / <a href={`/cars/${m.makeSlug}/`}>{m.make}</a> / {m.model}</p>
+    <h1>Program the garage door opener in a {m.make} {m.model}</h1>
+    <p class="lede">Your {m.model} uses {sys}. You'll need your working garage remote and a step ladder to reach the opener's Learn button.</p>
+  </section>
+  {m.groups.map((g) => (
+    <section>
+      <h2>{yearSpan(g.years)} {m.model}</h2>
+      <Steps steps={g.steps} />
+      {g.rolling_code_note && <p class="small muted">{g.rolling_code_note}</p>}
+      <Source sample={g.sample} label={g.manual_source ?? `${m.make} owner's manual`} />
+    </section>
+  ))}
+  <section>
+    <h2>Find your opener's Learn button</h2>
+    <ul class="link-grid">{activeBrands().map((b) => <li><a href={`/${b.slug}/program-car/`}>{b.name}</a></li>)}</ul>
+  </section>
+  {siblings.length > 0 && (
+    <section>
+      <h2>Other {m.make} models</h2>
+      <ul class="link-grid">{siblings.map((s) => <li><a href={`/cars/${s.makeSlug}/${s.modelSlug}/`}>{s.model}</a></li>)}</ul>
+    </section>
+  )}
+</Base>

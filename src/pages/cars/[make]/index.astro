@@ -1,0 +1,19 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getCarMakes, yearSpan } from '../../../lib/data';
+export function getStaticPaths() {
+  return getCarMakes().map((mk) => ({ params: { make: mk.makeSlug }, props: { mk } }));
+}
+const { mk } = Astro.props as { mk: ReturnType<typeof getCarMakes>[number] };
+---
+<Base title={`How to Program a ${mk.make} Garage Door Opener (HomeLink)`} description={`Program the built-in garage door opener in your ${mk.make}: steps for each model and year from the ${mk.make} owner's manual.`}>
+  <section>
+    <p class="crumbs"><a href="/cars/">Cars</a> / {mk.make}</p>
+    <h1>{mk.make} garage door opener programming</h1>
+    <p class="lede">Pick your {mk.make} for the steps from its owner's manual.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Model</th><th>Years</th></tr></thead>
+      <tbody>{mk.models.map((m) => <tr><td><a href={`/cars/${m.makeSlug}/${m.modelSlug}/`}>{m.model}</a></td><td>{yearSpan([m.firstYear, m.lastYear])}</td></tr>)}</tbody>
+    </table></div>
+  </section>
+</Base>

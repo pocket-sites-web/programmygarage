@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import { activeBrands } from '../../lib/brands';
+import { openersFor } from '../../lib/data';
+---
+<Base title="Garage Door Opener Brands: Programming Guides" description="Programming guides for every garage door opener brand we cover: remotes, keypads, cars and resetting.">
+  <section>
+    <h1>Garage door opener brands</h1>
+    <p class="lede">Pick the name on your opener's motor unit.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Brand</th><th>Models covered</th></tr></thead>
+      <tbody>{activeBrands().map((b) => <tr><td><a href={`/${b.slug}/`}>{b.name}</a></td><td>{openersFor(b.name).length}</td></tr>)}</tbody>
+    </table></div>
+  </section>
+</Base>

@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import Lb from '../../components/Lb.astro';
+import { activeBrands, brandButtons, TASKS, type Brand } from '../../lib/brands';
+import { openersFor, openerHref, getLearnButton } from '../../lib/data';
+export function getStaticPaths() {
+  return activeBrands().map((b) => ({ params: { brand: b.slug }, props: { b } }));
+}
+const { b } = Astro.props as { b: Brand };
+const models = openersFor(b.name);
+const buttons = brandButtons(b);
+---
+<Base title={`${b.name} Garage Door Opener Programming: Remotes, Keypads, Cars`} description={`How to program a ${b.name} garage door opener: remotes, keypads, car buttons and erasing old remotes, plus where the Learn button is and which remotes work.`}>
+  <section>
+    <p class="crumbs"><a href="/brands/">Brands</a> / {b.name}</p>
+    <h1>{b.name} garage door opener programming</h1>
+    <p class="lede">{b.blurb}</p>
+  </section>
+  <section>
+    <h2>What do you want to do?</h2>
+    <ul class="tasks">
+      {TASKS.map((t) => <li><a href={`/${b.slug}/${t.slug}/`}>{t.title}</a></li>)}
+      <li><a href={`/${b.slug}/learn-button/`}>Find the Learn button</a></li>
+    </ul>
+  </section>
+  {buttons.length > 0 && (
+    <section>
+      <h2>Which Learn button do you have?</h2>
+      <p>The Learn button is {b.learnWhere}. Its colour tells you the radio technology and which remotes will work.</p>
+      <ul class="lb-grid">{buttons.map((l) => <li><a href={`/learn-button/${l.id}/`} style={`--c:${l.color ?? '#888'}`} class="lb"><i aria-hidden="true"></i><span>{l.label}<small>{l.technology}{l.years ? `, ${l.years}` : ''}</small></span></a></li>)}</ul>
+    </section>
+  )}
+  {models.length > 0 && (
+    <section>
+      <h2>{b.name} opener models</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Model</th><th>Type</th><th>Learn button</th></tr></thead>
+        <tbody>{models.map((o) => { const l = getLearnButton(o.learn_button); return <tr><td><a class="mono" href={openerHref(o)}>{o.model}</a></td><td>{o.type ?? ''}</td><td>{l ? <Lb l={l} /> : ''}</td></tr>; })}</tbody>
+      </table></div>
+    </section>
+  )}
+</Base>

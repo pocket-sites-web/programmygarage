@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import Lb from '../components/Lb.astro';
+import { activeBrands, TASKS } from '../lib/brands';
+import { learnButtons, openers, remotes, openerHref, remoteHref, getCarMakes } from '../lib/data';
+import { SITE_NAME, SITE_URL } from '../lib/site';
+const brands = activeBrands();
+const lookup = [
+  ...openers.map((o) => ({ k: `${o.brand} ${o.model}`.toLowerCase(), m: o.model.toLowerCase(), u: openerHref(o), n: `${o.brand} ${o.model} opener` })),
+  ...remotes.map((r) => ({ k: `${r.brand} ${r.model}`.toLowerCase(), m: r.model.toLowerCase(), u: remoteHref(r), n: `${r.brand} ${r.model} ${r.kind}` })),
+];
+const carMakes = getCarMakes();
+const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE_NAME, url: `${SITE_URL}/` }];
+---
+<Base title="How to Program a Garage Door Opener, Remote, Keypad or Car" description="Step-by-step programming for LiftMaster, Chamberlain, Craftsman and Genie garage door openers, remotes, keypads and car HomeLink buttons, by model and Learn button colour." jsonLd={jsonLd}>
+  <section>
+    <h1 style="font-size:46px;line-height:48px">Program your garage door opener</h1>
+    <p class="lede">Pick your opener brand and what you want to pair. We'll show the exact steps for your model, and which remotes work with it.</p>
+    <form class="picker" id="finder">
+      <select id="brand" aria-label="Opener brand"><option value="">Opener brand</option>{brands.map((b) => <option value={b.slug}>{b.name}</option>)}</select>
+      <select id="task" aria-label="What are you programming?"><option value="">What are you programming?</option>{TASKS.map((t) => <option value={t.slug}>{t.title}</option>)}<option value="learn-button">Find the Learn button</option></select>
+      <button class="btn" type="submit">Show me how</button>
+    </form>
+  </section>
+  <section>
+    <h2>Know your model number?</h2>
+    <p class="small muted">It's on a label on the motor unit, or on the back of the remote or keypad.</p>
+    <form class="picker" id="model-search">
+      <input type="search" id="q" placeholder="e.g. 8500, 893MAX, 7055" aria-label="Model number" list="models" />
+      <datalist id="models">{lookup.map((x) => <option value={x.n} />)}</datalist>
+      <button class="btn ghost" type="submit">Find</button>
+      <span id="miss" class="small muted" hidden>No match yet. Try your brand above.</span>
+    </form>
+  </section>
+  <section>
+    <h2>What colour is your Learn button?</h2>
+    <p>The colour of the square button on your opener tells you which remotes and keypads will work with it, and which steps to follow.</p>
+    <ul class="lb-grid">{learnButtons.map((l) => <li><a href={`/learn-button/${l.id}/`} style={`--c:${l.color ?? '#888'}`} class="lb"><i aria-hidden="true"></i><span>{l.label}<small>{l.technology}{l.years ? `, ${l.years}` : ''}</small></span></a></li>)}</ul>
+  </section>
+  <section>
+    <h2>Opener brands</h2>
+    <ul class="link-grid">{brands.map((b) => <li><a href={`/${b.slug}/`}>{b.name}</a></li>)}</ul>
+  </section>
+  {carMakes.length > 0 && (
+    <section>
+      <h2>Program the garage button in your car</h2>
+      <ul class="link-grid">{carMakes.map((m) => <li><a href={`/cars/${m.makeSlug}/`}>{m.make}</a></li>)}</ul>
+    </section>
+  )}
+  <script is:inline define:vars={{ lookup }}>
+    document.getElementById('finder').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const b = document.getElementById('brand').value, t = document.getElementById('task').value;
+      if (b) location.href = `/${b}/` + (t ? `${t}/` : '');
+    });
+    document.getElementById('model-search').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = document.getElementById('q').value.trim().toLowerCase().replace(/ (opener|remote|keypad|universal)$/, '');
+      if (!q) return;
+      const hit = lookup.find((x) => x.k === q || x.m === q) || lookup.find((x) => x.k.includes(q));
+      if (hit) location.href = hit.u; else document.getElementById('miss').hidden = false;
+    });
+  </script>
+</Base>
