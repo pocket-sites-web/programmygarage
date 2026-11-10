@@ -29,6 +29,12 @@ export interface Opener {
   years: string | null;
   learn_button: string | null;
   learn_button_location: string | null;
+  learn_button_style?: string | null;
+  manual_year?: string | null;
+  wifi?: boolean | null;
+  smart_app?: string | null;
+  max_wireless_devices?: number | null;
+  homelink_bridge_note?: string | null;
   myq: boolean | null;
   battery_backup: boolean | null;
   steps: Steps | null;
@@ -47,6 +53,10 @@ export interface Remote {
   works_with_learn_buttons: string[];
   works_with_brands: string[];
   steps: string[] | null;
+  description?: string | null;
+  discontinued?: boolean;
+  commercial_series_ii?: boolean;
+  manual_url?: string | null;
   source_url: string | null;
   sample?: boolean;
 }
@@ -57,6 +67,8 @@ export interface CarRow {
   year: number;
   system: string | null;
   steps: string[];
+  rolling_code_steps?: string[] | null;
+  button_location?: string | null;
   rolling_code_note: string | null;
   manual_source: string | null;
   sample?: boolean;
@@ -66,6 +78,8 @@ export interface CarGroup {
   years: number[];
   system: string | null;
   steps: string[];
+  rolling_code_steps: string[];
+  button_location: string | null;
   rolling_code_note: string | null;
   manual_source: string | null;
   sample: boolean;
@@ -114,6 +128,16 @@ export const remotesForButton = (l: LearnButton) => {
   const ids = new Set([...l.compatible_remote_ids, ...l.compatible_keypad_ids]);
   return remotes.filter((r) => ids.has(r.id) || r.works_with_learn_buttons.includes(l.id));
 };
+// What to show in a buy box: current models first; discontinued ones only if nothing current fits.
+export const buyable = (list: Remote[]) => {
+  const current = list.filter((r) => !r.discontinued && !r.commercial_series_ii);
+  return (current.length ? current : list).slice(0, 8);
+};
+// "Intellicode Keypad" already says what it is; "877MAX" needs the kind added.
+export const remoteName = (r: Remote) => {
+  const kind = r.kind === 'keypad' ? 'Keypad' : 'Remote';
+  return new RegExp(kind, 'i').test(r.model) ? `${r.brand} ${r.model}` : `${r.brand} ${r.model} ${kind}`;
+};
 export const remotesForOpener = (o: Opener) => {
   const l = getLearnButton(o.learn_button);
   return l ? remotesForButton(l) : [];
@@ -130,10 +154,11 @@ export function getCarModels(): CarModel[] {
       rows.sort((a, b) => b.year - a.year);
       const groups: CarGroup[] = [];
       for (const r of rows) {
-        const key = JSON.stringify(r.steps);
-        const g = groups.find((x) => JSON.stringify(x.steps) === key);
+        const rc = r.rolling_code_steps ?? [];
+        const key = JSON.stringify([r.steps, rc]);
+        const g = groups.find((x) => JSON.stringify([x.steps, x.rolling_code_steps]) === key);
         if (g) g.years.push(r.year);
-        else groups.push({ years: [r.year], system: r.system, steps: r.steps, rolling_code_note: r.rolling_code_note, manual_source: r.manual_source, sample: !!r.sample });
+        else groups.push({ years: [r.year], system: r.system, steps: r.steps, rolling_code_steps: rc, button_location: r.button_location ?? null, rolling_code_note: r.rolling_code_note, manual_source: r.manual_source, sample: !!r.sample });
       }
       const years = rows.map((r) => r.year);
       return {

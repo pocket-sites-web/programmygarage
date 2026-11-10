@@ -6,7 +6,7 @@ import BuyBox from '../../../components/BuyBox.astro';
 import Source from '../../../components/Source.astro';
 import Safety from '../../../components/Safety.astro';
 import { activeBrands, brandButtons, TASKS, type Brand, type Task } from '../../../lib/brands';
-import { openersFor, openerHref, openerSlug, getLearnButton, remotesForOpener, remotesForButton, slugify, type Opener } from '../../../lib/data';
+import { openersFor, openerHref, openerSlug, getLearnButton, remotesForOpener, remotesForButton, buyable, slugify, type Opener } from '../../../lib/data';
 
 type P =
   | { kind: 'task'; b: Brand; t: Task }
@@ -88,22 +88,26 @@ const jsonLd =
             {o.years && <div><dt>Years made</dt><dd>{o.years}</dd></div>}
             {o.myq !== null && <div><dt>myQ / Wi-Fi</dt><dd>{o.myq ? 'Yes' : 'No'}</dd></div>}
             {o.battery_backup !== null && <div><dt>Battery backup</dt><dd>{o.battery_backup ? 'Yes' : 'No'}</dd></div>}
+            {o.smart_app && <div><dt>App</dt><dd>{o.smart_app}</dd></div>}
+            {o.max_wireless_devices && <div><dt>Remembers</dt><dd>{o.max_wireless_devices} devices</dd></div>}
+            {!o.years && o.manual_year && <div><dt>Manual dated</dt><dd>{o.manual_year}</dd></div>}
           </dl>
           {o.learn_button_location && <p><strong>Where it is:</strong> {o.learn_button_location}</p>}
-          {o.also_sold_as && o.also_sold_as.length > 0 && <p class="small muted">Also sold as {o.also_sold_as.join(', ')}.</p>}
-          <Source sample={o.sample} url={o.manual_url ?? o.source_url} label={`${b.name} ${o.model} manual`} />
+          {o.also_sold_as && o.also_sold_as.length > 0 && <p class="small">Same opener as model{o.also_sold_as.length > 1 ? 's' : ''} <span class="mono">{o.also_sold_as.join(', ')}</span>, so these steps work for {o.also_sold_as.length > 1 ? 'those' : 'that one'} too.</p>}
+          <Source sample={o.sample} url={o.manual_url ?? o.source_url} label={`${b.name} ${o.model} owner's manual`} />
         </div>
       </section>
       {openerTasks.map((x) => (
         <section id={x.id}>
           <h2>{x.h}</h2>
           <Steps steps={x.s!} />
+          {x.id === 'car' && <p class="small">The first part happens in your car. Find your car's own steps in our <a href="/cars/">car guides</a>.</p>}
           {x.id === 'car' && ol?.needs_homelink_bridge_for_older_cars && <p class="warn small">Cars made before about 2012 may not work with this opener's {ol.technology}. A HomeLink compatibility bridge (LiftMaster 855LM) fixes it.</p>}
         </section>
       ))}
       {openerTasks.length === 0 && <p class="note">Programming steps for the {o.model} are being checked. Meanwhile, see the general <a href={`/${b.slug}/program-remote/`}>{b.name} remote steps</a>.</p>}
       {openerTasks.length > 0 && <Safety />}
-      <BuyBox items={remotesForOpener(o)} heading={`Remotes and keypads that work with the ${o.model}`} />
+      <BuyBox items={buyable(remotesForOpener(o))} heading={`Remotes and keypads that work with the ${o.model}`} />
     </>
   )}
 
@@ -113,7 +117,7 @@ const jsonLd =
         <p class="crumbs"><a href="/brands/">Brands</a> / <a href={`/${b.slug}/`}>{b.name}</a> / {t.title}</p>
         <h1>{t.h.replace('{brand}', b.name)}</h1>
         {tSteps ? (
-          <p class="lede">This works for every {b.name} opener with a Learn button{b.family === 'chamberlain' ? ' (yellow, purple, red/orange or green)' : ''}. It takes about a minute. You'll need a step ladder.</p>
+          <p class="lede">{b.stepsScope ? `These steps are for ${b.stepsScope}.` : `This works for every ${b.name} opener with a coloured Learn button.`} It takes about a minute. You'll need a step ladder.</p>
         ) : (
           <p class="lede">{b.name} steps vary by model. Pick your model below for the exact steps.</p>
         )}
