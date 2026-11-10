@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import Lb from '../../components/Lb.astro';
+import { learnButtons, openersWithButton, remotesForButton } from '../../lib/data';
+const fam = (f: string) => learnButtons.filter((l) => l.brand_family === f);
+const groups = [
+  { name: 'LiftMaster, Chamberlain and Craftsman', items: fam('chamberlain') },
+  { name: 'Genie and Overhead Door', items: fam('genie') },
+  { name: 'Other brands', items: learnButtons.filter((l) => !['chamberlain', 'genie'].includes(l.brand_family)) },
+].filter((g) => g.items.length);
+---
+<Base title="Garage Door Opener Learn Button Colours Explained (Yellow, Purple, Red, Green)" description="What the colour of your garage door opener's Learn button means: the radio technology, the years it was made, and which remotes and keypads will work with it.">
+  <section>
+    <h1>Learn button colours explained</h1>
+    <p class="lede">The square Learn button on LiftMaster, Chamberlain and Craftsman openers is colour-coded. The colour tells you the radio technology inside, so it decides which remotes, keypads and cars will pair with it.</p>
+  </section>
+  {groups.map((g) => (
+    <section>
+      <h2>{g.name}</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Colour</th><th>Technology</th><th>Years</th><th>Frequency</th><th>Remotes</th></tr></thead>
+        <tbody>{g.items.map((l) => <tr><td><Lb l={l} /></td><td>{l.technology}</td><td>{l.years ?? ''}</td><td>{l.frequencies_mhz?.length ? `${l.frequencies_mhz.join(' / ')} MHz` : ''}</td><td>{remotesForButton(l).length}</td></tr>)}</tbody>
+      </table></div>
+    </section>
+  ))}
+  <section>
+    <h2>No coloured button?</h2>
+    <p>Older openers (before about 1993) and some other brands use small DIP switches instead. You'll find them inside the remote's battery cover and on the motor unit. Set the switches in the new remote to match the opener.</p>
+  </section>
+</Base>

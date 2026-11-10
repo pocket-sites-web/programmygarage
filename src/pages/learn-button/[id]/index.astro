@@ -1,0 +1,52 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Lb from '../../../components/Lb.astro';
+import BuyBox from '../../../components/BuyBox.astro';
+import Source from '../../../components/Source.astro';
+import Steps from '../../../components/Steps.astro';
+import { learnButtons, openersWithButton, remotesForButton, openerHref, type LearnButton } from '../../../lib/data';
+import { BRANDS } from '../../../lib/brands';
+export function getStaticPaths() {
+  return learnButtons.map((l) => ({ params: { id: l.id }, props: { l } }));
+}
+const { l } = Astro.props as { l: LearnButton };
+const ops = openersWithButton(l.id);
+const fam = BRANDS.filter((b) => b.family === l.brand_family);
+const steps = fam[0]?.steps.remote ?? null;
+const isColour = l.brand_family === 'chamberlain';
+const name = isColour ? `${l.label} Learn Button` : l.label;
+---
+<Base title={`${name}: ${l.technology ?? 'Garage Door Opener'} Remotes and Programming`} description={`${name} on a garage door opener means ${l.technology ?? 'a specific radio type'}${l.years ? ` (${l.years})` : ''}. Which remotes and keypads work, and how to program them.`}>
+  <section>
+    <p class="crumbs"><a href="/learn-button/">Learn button colours</a> / {l.label}</p>
+    <h1>{name}</h1>
+    <div class="card">
+      <Lb l={l} size="lg" link={false} />
+      <dl class="facts">
+        {l.technology && <div><dt>Technology</dt><dd>{l.technology}</dd></div>}
+        {l.years && <div><dt>Years</dt><dd>{l.years}</dd></div>}
+        {l.frequencies_mhz?.length ? <div><dt>Frequency</dt><dd>{l.frequencies_mhz.join(' / ')} MHz</dd></div> : null}
+        {fam.length > 0 && <div><dt>Brands</dt><dd>{fam.map((b) => b.name).join(', ')}</dd></div>}
+      </dl>
+      {l.needs_homelink_bridge_for_older_cars && <p class="warn small">Many cars built before about 2012 can't talk to this opener directly. A HomeLink compatibility bridge (LiftMaster 855LM) plugs into the opener and fixes it.</p>}
+      <Source sample={l.sample} url={l.source_url} label="Compatibility chart" />
+    </div>
+  </section>
+  {steps && (
+    <section>
+      <h2>How to program a remote to a {l.label.toLowerCase()} Learn button</h2>
+      <Steps steps={steps} />
+    </section>
+  )}
+  <BuyBox items={remotesForButton(l)} heading={`Remotes and keypads that work with a ${l.label.toLowerCase()} Learn button`} />
+  {ops.length > 0 && (
+    <section>
+      <h2>Openers with this Learn button</h2>
+      <ul class="link-grid">{ops.map((o) => <li><a class="mono" href={openerHref(o)}>{o.brand} {o.model}</a></li>)}</ul>
+    </section>
+  )}
+  <section>
+    <h2>Other colours</h2>
+    <ul class="lb-grid">{learnButtons.filter((x) => x.id !== l.id && x.brand_family === l.brand_family).map((x) => <li><Lb l={x} sub /></li>)}</ul>
+  </section>
+</Base>

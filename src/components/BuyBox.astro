@@ -1,0 +1,24 @@
+---
+import type { Remote } from '../lib/data';
+import { remoteHref } from '../lib/data';
+import { amazonUrl } from '../lib/site';
+interface Props { items: Remote[]; heading?: string }
+const { items, heading = 'Remotes and keypads that work with it' } = Astro.props;
+const kindLabel = { remote: 'Remote', keypad: 'Keypad', universal: 'Universal remote' } as const;
+---
+{items.length > 0 && (
+  <section>
+    <h2>{heading}</h2>
+    <ul class="products">
+      {items.map((r) => (
+        <li>
+          <span class="label">{kindLabel[r.kind] ?? 'Remote'}{r.buttons ? ` · ${r.buttons}-button` : ''}</span>
+          <b>{r.brand} {r.model}</b>
+          <span class="small"><a href={remoteHref(r)}>Programming and compatibility</a></span>
+          <a class="btn" href={amazonUrl(`${r.brand} ${r.model}`)} rel="sponsored nofollow noopener" target="_blank">Check price on Amazon</a>
+        </li>
+      ))}
+    </ul>
+    <p class="small muted">Buying a replacement? Match the Learn button colour, not just the brand.</p>
+  </section>
+)}

@@ -1,0 +1,9 @@
+---
+import type { LearnButton } from '../lib/data';
+import { learnHref } from '../lib/data';
+interface Props { l: LearnButton; size?: 'lg'; link?: boolean; sub?: boolean }
+const { l, size, link = true, sub = false } = Astro.props;
+const style = `--c:${l.color ?? '#888'}`;
+const Tag = link ? 'a' : 'span';
+---
+<Tag class:list={['lb', size]} href={link ? learnHref(l) : undefined} style={style}><i aria-hidden="true"></i><span>{l.label}{sub && l.technology && <small class="muted"> · {l.technology}</small>}</span></Tag>

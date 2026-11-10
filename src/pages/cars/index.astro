@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCarMakes } from '../../lib/data';
+const makes = getCarMakes();
+---
+<Base title="How to Program Your Car's Garage Door Opener (HomeLink) by Make" description="Step-by-step instructions to program the built-in garage door opener (HomeLink) in your car, by make, model and year, from the owner's manual.">
+  <section>
+    <h1>Program the garage door button in your car</h1>
+    <p class="lede">Most cars with buttons on the mirror, visor or overhead console use HomeLink. Pick your car for the steps from its owner's manual.</p>
+    <ul class="link-grid">{makes.map((m) => <li><a href={`/cars/${m.makeSlug}/`}>{m.make}</a> <span class="small muted">{m.models.length} models</span></li>)}</ul>
+  </section>
+  <section>
+    <h2>How it works</h2>
+    <p>First the car copies the signal from your handheld remote. Then, because most openers made since 1997 use rolling codes, you press the Learn button on the opener so it accepts the car. If your opener has a yellow Learn button and your car is older, you may need a HomeLink compatibility bridge.</p>
+  </section>
+</Base>

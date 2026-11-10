@@ -1,0 +1,8 @@
+---
+interface Props { sample?: boolean; url?: string | null; label?: string }
+const { sample, url, label = "Maker's manual" } = Astro.props;
+---
+<p class="src">
+  {sample ? <span class="ok">Sample data</span> : <span class="ok">✓ Checked against the maker's instructions</span>}
+  {url && <> · <a href={url} rel="nofollow noopener" target="_blank">{label}</a></>}
+</p>

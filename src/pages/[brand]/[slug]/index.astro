@@ -1,0 +1,177 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Steps from '../../../components/Steps.astro';
+import Lb from '../../../components/Lb.astro';
+import BuyBox from '../../../components/BuyBox.astro';
+import Source from '../../../components/Source.astro';
+import Safety from '../../../components/Safety.astro';
+import { activeBrands, brandButtons, TASKS, type Brand, type Task } from '../../../lib/brands';
+import { openersFor, openerHref, openerSlug, getLearnButton, remotesForOpener, remotesForButton, slugify, type Opener } from '../../../lib/data';
+
+type P =
+  | { kind: 'task'; b: Brand; t: Task }
+  | { kind: 'learn'; b: Brand }
+  | { kind: 'opener'; b: Brand; o: Opener };
+
+export function getStaticPaths() {
+  const out: { params: { brand: string; slug: string }; props: P }[] = [];
+  for (const b of activeBrands()) {
+    for (const t of TASKS) out.push({ params: { brand: b.slug, slug: t.slug }, props: { kind: 'task', b, t } });
+    out.push({ params: { brand: b.slug, slug: 'learn-button' }, props: { kind: 'learn', b } });
+    for (const o of openersFor(b.name)) out.push({ params: { brand: b.slug, slug: openerSlug(o) }, props: { kind: 'opener', b, o } });
+  }
+  return out;
+}
+const p = Astro.props as P;
+const b = p.b;
+const models = openersFor(b.name);
+const buttons = brandButtons(b);
+const taskLinks = (current?: string) => [
+  ...TASKS.map((t) => ({ href: `/${b.slug}/${t.slug}/`, label: t.title, cur: current === t.slug })),
+  { href: `/${b.slug}/learn-button/`, label: 'Find the Learn button', cur: current === 'learn-button' },
+];
+
+// Opener page data
+const o = p.kind === 'opener' ? p.o : null;
+const ol = o ? getLearnButton(o.learn_button) : undefined;
+const oSteps = o?.steps ?? {};
+const fallback = (k: keyof typeof b.steps) => (oSteps[k] && oSteps[k]!.length ? oSteps[k]! : b.steps[k] ?? null);
+const openerTasks = o
+  ? [
+      { id: 'remote', h: `Program a remote to the ${o.model}`, s: fallback('remote') },
+      { id: 'keypad', h: 'Program a keypad', s: fallback('keypad') },
+      { id: 'car', h: 'Program your car (HomeLink)', s: fallback('car') },
+      { id: 'erase', h: 'Erase all remotes', s: fallback('erase') },
+    ].filter((x) => x.s && x.s.length)
+  : [];
+
+// Task page data
+const t = p.kind === 'task' ? p.t : null;
+const tSteps = t ? b.steps[t.key] ?? null : null;
+const title =
+  p.kind === 'opener'
+    ? `${b.name} ${o!.model} Learn Button, Remotes & Programming`
+    : p.kind === 'learn'
+      ? `Where Is the Learn Button on a ${b.name} Garage Door Opener?`
+      : `How to ${t!.verb.replace(/^./, (c) => c.toUpperCase())} for a ${b.name} Garage Door Opener`;
+const description =
+  p.kind === 'opener'
+    ? `${b.name} ${o!.model}: where the Learn button is${ol ? ` (${ol.label.toLowerCase()})` : ''}, how to program remotes, keypads and cars, and which remotes work with it.`
+    : p.kind === 'learn'
+      ? `Find the Learn button on your ${b.name} opener, what its colour means, and how to use it to pair remotes, keypads and cars.`
+      : `Step-by-step: how to ${t!.verb} for a ${b.name} garage door opener, with the Learn button method, timings and what to do if it doesn't work.`;
+const faq =
+  p.kind === 'task' && t!.key === 'remote' && b.family === 'chamberlain'
+    ? [
+        { q: `Why won't my ${b.name} remote program?`, a: 'The usual causes: the Learn button was held instead of pressed (which erases remotes), the 30-second window ran out, the remote is for a different Learn button colour, or the remote battery is flat. Check the colour first.' },
+        { q: `Can I program a ${b.name} remote without the Learn button?`, a: 'Only if you have a smart wall control (with a screen) or a working keypad. Otherwise you need the Learn button on the motor unit.' },
+        { q: 'Will adding a new remote erase my old ones?', a: 'No. Pressing the Learn button once adds a remote and keeps the others. Only holding the Learn button down for about 6 seconds erases them.' },
+      ]
+    : [];
+const jsonLd =
+  p.kind === 'task' && tSteps
+    ? [{ '@context': 'https://schema.org', '@type': 'HowTo', name: title, step: tSteps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, text: s })) },
+       ...(faq.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : [])]
+    : undefined;
+---
+<Base title={title} description={description} jsonLd={jsonLd}>
+  {p.kind === 'opener' && o && (
+    <>
+      <section>
+        <p class="crumbs"><a href="/brands/">Brands</a> / <a href={`/${b.slug}/`}>{b.name}</a> / {o.model}</p>
+        <h1>{b.name} {o.model}: Learn button and programming</h1>
+        <div class="card">
+          <dl class="facts">
+            <div><dt>Learn button</dt><dd>{ol ? <Lb l={ol} /> : 'Not yet checked'}</dd></div>
+            {ol?.technology && <div><dt>Technology</dt><dd>{ol.technology}</dd></div>}
+            {o.type && <div><dt>Type</dt><dd>{o.type}</dd></div>}
+            {o.years && <div><dt>Years made</dt><dd>{o.years}</dd></div>}
+            {o.myq !== null && <div><dt>myQ / Wi-Fi</dt><dd>{o.myq ? 'Yes' : 'No'}</dd></div>}
+            {o.battery_backup !== null && <div><dt>Battery backup</dt><dd>{o.battery_backup ? 'Yes' : 'No'}</dd></div>}
+          </dl>
+          {o.learn_button_location && <p><strong>Where it is:</strong> {o.learn_button_location}</p>}
+          {o.also_sold_as && o.also_sold_as.length > 0 && <p class="small muted">Also sold as {o.also_sold_as.join(', ')}.</p>}
+          <Source sample={o.sample} url={o.manual_url ?? o.source_url} label={`${b.name} ${o.model} manual`} />
+        </div>
+      </section>
+      {openerTasks.map((x) => (
+        <section id={x.id}>
+          <h2>{x.h}</h2>
+          <Steps steps={x.s!} />
+          {x.id === 'car' && ol?.needs_homelink_bridge_for_older_cars && <p class="warn small">Cars made before about 2012 may not work with this opener's {ol.technology}. A HomeLink compatibility bridge (LiftMaster 855LM) fixes it.</p>}
+        </section>
+      ))}
+      {openerTasks.length === 0 && <p class="note">Programming steps for the {o.model} are being checked. Meanwhile, see the general <a href={`/${b.slug}/program-remote/`}>{b.name} remote steps</a>.</p>}
+      {openerTasks.length > 0 && <Safety />}
+      <BuyBox items={remotesForOpener(o)} heading={`Remotes and keypads that work with the ${o.model}`} />
+    </>
+  )}
+
+  {p.kind === 'task' && t && (
+    <>
+      <section>
+        <p class="crumbs"><a href="/brands/">Brands</a> / <a href={`/${b.slug}/`}>{b.name}</a> / {t.title}</p>
+        <h1>{t.h.replace('{brand}', b.name)}</h1>
+        {tSteps ? (
+          <p class="lede">This works for every {b.name} opener with a Learn button{b.family === 'chamberlain' ? ' (yellow, purple, red/orange or green)' : ''}. It takes about a minute. You'll need a step ladder.</p>
+        ) : (
+          <p class="lede">{b.name} steps vary by model. Pick your model below for the exact steps.</p>
+        )}
+      </section>
+      {tSteps && <section><Steps steps={tSteps} /></section>}
+      {t.key === 'car' && b.family === 'chamberlain' && <p class="warn small">Yellow Learn button and a car older than about 2012? The car may not support Security+ 2.0. A HomeLink compatibility bridge (LiftMaster 855LM) fixes it.</p>}
+      {tSteps && t.key !== 'erase' && <Safety />}
+      {t.key === 'remote' && buttons.length > 0 && (
+        <section>
+          <h2>Buying a new remote? Match the Learn button colour</h2>
+          <ul class="lb-grid">{buttons.map((l) => <li><a href={`/learn-button/${l.id}/`} style={`--c:${l.color ?? '#888'}`} class="lb"><i aria-hidden="true"></i><span>{l.label}<small>{remotesForButton(l).length} compatible remotes and keypads</small></span></a></li>)}</ul>
+        </section>
+      )}
+      {faq.length > 0 && (
+        <section class="faq">
+          <h2>Common problems</h2>
+          {faq.map((f) => <div><h3>{f.q}</h3><p>{f.a}</p></div>)}
+        </section>
+      )}
+      {models.length > 0 && (
+        <section>
+          <h2>Steps for your exact {b.name} model</h2>
+          <ul class="link-grid">{models.map((m) => <li><a class="mono" href={`${openerHref(m)}${t.key === 'erase' ? '#erase' : `#${t.key}`}`}>{m.model}</a></li>)}</ul>
+        </section>
+      )}
+    </>
+  )}
+
+  {p.kind === 'learn' && (
+    <>
+      <section>
+        <p class="crumbs"><a href="/brands/">Brands</a> / <a href={`/${b.slug}/`}>{b.name}</a> / Learn button</p>
+        <h1>Where is the Learn button on a {b.name} opener?</h1>
+        <p class="lede">The Learn button is {b.learnWhere}. Press it once to pair a remote, keypad or car. Hold it down to erase all of them, so be careful.</p>
+      </section>
+      {buttons.length > 0 && (
+        <section>
+          <h2>What the colour means</h2>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Colour</th><th>Technology</th><th>Years</th></tr></thead>
+            <tbody>{buttons.map((l) => <tr><td><Lb l={l} /></td><td>{l.technology}</td><td>{l.years ?? ''}</td></tr>)}</tbody>
+          </table></div>
+        </section>
+      )}
+      {models.length > 0 && (
+        <section>
+          <h2>Learn button by {b.name} model</h2>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Model</th><th>Colour</th><th>Where</th></tr></thead>
+            <tbody>{models.map((m) => { const l = getLearnButton(m.learn_button); return <tr><td><a class="mono" href={openerHref(m)}>{m.model}</a></td><td>{l ? <Lb l={l} /> : ''}</td><td class="small">{m.learn_button_location ?? ''}</td></tr>; })}</tbody>
+          </table></div>
+        </section>
+      )}
+    </>
+  )}
+
+  <section>
+    <h2>More {b.name} guides</h2>
+    <ul class="tasks">{taskLinks(p.kind === 'task' ? t!.slug : p.kind === 'learn' ? 'learn-button' : undefined).map((x) => <li><a href={x.href} aria-current={x.cur ? 'page' : undefined}>{x.label}</a></li>)}</ul>
+  </section>
+</Base>
