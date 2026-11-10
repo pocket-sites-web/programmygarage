@@ -4,7 +4,7 @@ import Lb from '../../../components/Lb.astro';
 import BuyBox from '../../../components/BuyBox.astro';
 import Source from '../../../components/Source.astro';
 import Steps from '../../../components/Steps.astro';
-import { learnButtons, openersWithButton, remotesForButton, openerHref, type LearnButton } from '../../../lib/data';
+import { learnButtons, openersWithButton, remotesForButton, buyable, openerHref, type LearnButton } from '../../../lib/data';
 import { BRANDS } from '../../../lib/brands';
 export function getStaticPaths() {
   return learnButtons.map((l) => ({ params: { id: l.id }, props: { l } }));
@@ -13,8 +13,8 @@ const { l } = Astro.props as { l: LearnButton };
 const ops = openersWithButton(l.id);
 const fam = BRANDS.filter((b) => b.family === l.brand_family);
 const steps = fam[0]?.steps.remote ?? null;
-const isColour = l.brand_family === 'chamberlain';
-const name = isColour ? `${l.label} Learn Button` : l.label;
+const isColour = l.brand_family === 'chamberlain' && !['dip', 'blue'].includes(l.id);
+const name = isColour ? `${l.label.replace(/\s*\(.*\)$/, '')} Learn Button` : l.label.replace(/\s*\(.*\)$/, '');
 ---
 <Base title={`${name}: ${l.technology ?? 'Garage Door Opener'} Remotes and Programming`} description={`${name} on a garage door opener means ${l.technology ?? 'a specific radio type'}${l.years ? ` (${l.years})` : ''}. Which remotes and keypads work, and how to program them.`}>
   <section>
@@ -29,7 +29,8 @@ const name = isColour ? `${l.label} Learn Button` : l.label;
         {fam.length > 0 && <div><dt>Brands</dt><dd>{fam.map((b) => b.name).join(', ')}</dd></div>}
       </dl>
       {l.needs_homelink_bridge_for_older_cars && <p class="warn small">Many cars built before about 2012 can't talk to this opener directly. A HomeLink compatibility bridge (LiftMaster 855LM) plugs into the opener and fixes it.</p>}
-      <Source sample={l.sample} url={l.source_url} label="Compatibility chart" />
+      {(l as any).note && <p class="small muted">{(l as any).note}</p>}
+      <Source sample={l.sample} url={l.source_url} label="Chamberlain Group colour chart" />
     </div>
   </section>
   {steps && (
@@ -38,7 +39,7 @@ const name = isColour ? `${l.label} Learn Button` : l.label;
       <Steps steps={steps} />
     </section>
   )}
-  <BuyBox items={remotesForButton(l)} heading={`Remotes and keypads that work with a ${l.label.toLowerCase()} Learn button`} />
+  <BuyBox items={buyable(remotesForButton(l))} heading={`Remotes and keypads that work with a ${l.label.toLowerCase()} Learn button`} />
   {ops.length > 0 && (
     <section>
       <h2>Openers with this Learn button</h2>

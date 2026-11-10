@@ -1,5 +1,21 @@
 import { openers, slugify, learnButtons, type TaskKey } from './data';
 
+// Most common steps for a task across a brand's openers (Genie publishes one method per button style).
+function commonSteps(brand: string, style?: string): Brand['steps'] {
+  const out: Brand['steps'] = {};
+  const list = openers.filter((o) => o.brand === brand && (!style || o.learn_button_style === style));
+  for (const k of ['remote', 'keypad', 'car', 'erase'] as TaskKey[]) {
+    const counts = new Map<string, number>();
+    for (const o of list) {
+      const st = o.steps?.[k];
+      if (st?.length) counts.set(JSON.stringify(st), (counts.get(JSON.stringify(st)) ?? 0) + 1);
+    }
+    const top = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
+    if (top) out[k] = JSON.parse(top[0]);
+  }
+  return out;
+}
+
 export interface Brand {
   name: string;
   slug: string;
@@ -8,6 +24,7 @@ export interface Brand {
   learnWhere: string;
   // Brand-wide steps, in our own words. Only filled where every model of the family works the same way.
   steps: Partial<Record<TaskKey, string[]>>;
+  stepsScope?: string; // who the brand-wide steps apply to, when not every model
 }
 
 const CHAMBERLAIN_STEPS: Brand['steps'] = {
@@ -40,7 +57,9 @@ export const BRANDS: Brand[] = [
   { name: 'LiftMaster', slug: 'liftmaster', family: 'chamberlain', blurb: 'LiftMaster is the professional-installer brand of the Chamberlain Group. Its openers, remotes and keypads work the same way as Chamberlain and Craftsman ones with the same Learn button colour.', learnWhere: 'on the back or side of the motor unit, next to a small LED, near the antenna wire', steps: CHAMBERLAIN_STEPS },
   { name: 'Chamberlain', slug: 'chamberlain', family: 'chamberlain', blurb: 'Chamberlain openers are the retail version of LiftMaster. Programming is identical, and remotes are interchangeable when the Learn button colour matches.', learnWhere: 'on the back or side of the motor unit, sometimes under the light lens', steps: CHAMBERLAIN_STEPS },
   { name: 'Craftsman', slug: 'craftsman', family: 'chamberlain', blurb: 'Craftsman garage door openers sold at Sears were made by Chamberlain, so they use the same Learn button colours and the same remotes.', learnWhere: 'on the back of the motor unit, near the antenna wire, often under the light cover', steps: CHAMBERLAIN_STEPS },
-  { name: 'Genie', slug: 'genie', family: 'genie', blurb: 'Genie openers use Intellicode rolling codes (Intellicode 2 on newer models). Older Genie openers use DIP switches inside the remote and the powerhead.', learnWhere: 'on the powerhead, usually beside or under the light lens; it may be labelled Learn, Program or Learn Code', steps: {} },
+  { name: 'Genie', slug: 'genie', family: 'genie', blurb: 'Genie openers use Intellicode rolling codes. Current models have a square PROGRAM/SET button with two LEDs; older ones have a round LEARN CODE button, and openers made before 1995 use DIP code switches.', learnWhere: 'on the powerhead: a square PROGRAM/SET button next to the round and long LEDs on current models, or a round LEARN CODE button on older ones', steps: commonSteps('Genie', 'prgm'), stepsScope: 'current Genie openers with a square PROGRAM/SET button' },
+  { name: 'Raynor', slug: 'raynor', family: 'chamberlain', blurb: 'Raynor openers are made by the Chamberlain Group, so they use the same Learn button colours and remotes as LiftMaster.', learnWhere: 'on the back or side of the motor unit, near the antenna wire', steps: CHAMBERLAIN_STEPS },
+  { name: 'True Value', slug: 'true-value', family: 'chamberlain', blurb: 'True Value store-brand openers were made by the Chamberlain Group and program the same way as Chamberlain openers.', learnWhere: 'on the back or side of the motor unit, near the antenna wire', steps: CHAMBERLAIN_STEPS },
   { name: 'Overhead Door', slug: 'overhead-door', family: 'genie', blurb: 'Overhead Door openers are made by the same company as Genie and use the same Intellicode technology.', learnWhere: 'on the powerhead, near the light lens', steps: {} },
   { name: 'Linear', slug: 'linear', family: 'other', blurb: 'Linear openers and Multi-Code remotes are common in older homes and gated communities.', learnWhere: 'on the opener\'s logic board, behind the light cover', steps: {} },
   { name: 'Marantec', slug: 'marantec', family: 'other', blurb: 'Marantec openers are sold mainly through garage door dealers.', learnWhere: 'on the control panel of the powerhead', steps: {} },

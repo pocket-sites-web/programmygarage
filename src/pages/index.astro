@@ -7,7 +7,8 @@ import { SITE_NAME, SITE_URL } from '../lib/site';
 const brands = activeBrands();
 const lookup = [
   ...openers.map((o) => ({ k: `${o.brand} ${o.model}`.toLowerCase(), m: o.model.toLowerCase(), u: openerHref(o), n: `${o.brand} ${o.model} opener` })),
-  ...remotes.map((r) => ({ k: `${r.brand} ${r.model}`.toLowerCase(), m: r.model.toLowerCase(), u: remoteHref(r), n: `${r.brand} ${r.model} ${r.kind}` })),
+  ...openers.flatMap((o) => (o.also_sold_as ?? []).map((a) => ({ k: `${o.brand} ${a}`.toLowerCase(), m: a.toLowerCase(), u: openerHref(o), n: `${o.brand} ${a} opener` }))),
+  ...remotes.filter((r) => !r.commercial_series_ii).map((r) => ({ k: `${r.brand} ${r.model}`.toLowerCase(), m: r.model.toLowerCase(), u: remoteHref(r), n: `${r.brand} ${r.model} ${r.kind}` })),
 ];
 const carMakes = getCarMakes();
 const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE_NAME, url: `${SITE_URL}/` }];

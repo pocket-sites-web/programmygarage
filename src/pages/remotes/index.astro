@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { remotes, remoteHref, getLearnButton } from '../../lib/data';
 import Lb from '../../components/Lb.astro';
-const list = [...remotes].sort((a, b) => a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model, 'en', { numeric: true }));
+const list = [...remotes].filter((r) => !r.commercial_series_ii).sort((a, b) => a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model, 'en', { numeric: true }));
 ---
 <Base title="Garage Door Remotes and Keypads: Compatibility and Programming" description="Every garage door remote and keypad we cover, with the openers and Learn button colours it works with and how to program it.">
   <section>
@@ -10,7 +10,7 @@ const list = [...remotes].sort((a, b) => a.brand.localeCompare(b.brand) || a.mod
     <p class="lede">Find your remote or keypad model (on the back or inside the battery cover) to see what it works with.</p>
     <div class="table-wrap"><table>
       <thead><tr><th>Model</th><th>Type</th><th>Works with</th></tr></thead>
-      <tbody>{list.map((r) => <tr><td><a class="mono" href={remoteHref(r)}>{r.brand} {r.model}</a></td><td>{r.kind}</td><td><span style="display:flex;flex-wrap:wrap;gap:8px">{r.works_with_learn_buttons.map((id) => getLearnButton(id)).filter(Boolean).map((l) => <Lb l={l!} />)}</span></td></tr>)}</tbody>
+      <tbody>{list.map((r) => <tr><td><a class="mono" href={remoteHref(r)}>{r.brand} {r.model}</a></td><td>{r.kind}{r.discontinued ? ' (discontinued)' : ''}</td><td><span style="display:flex;flex-wrap:wrap;gap:8px">{r.works_with_learn_buttons.map((id) => getLearnButton(id)).filter(Boolean).map((l) => <Lb l={l!} />)}</span></td></tr>)}</tbody>
     </table></div>
   </section>
 </Base>

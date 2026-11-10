@@ -21,9 +21,17 @@ const sys = m.groups[0]?.system ?? 'HomeLink';
   {m.groups.map((g) => (
     <section>
       <h2>{yearSpan(g.years)} {m.model}</h2>
+      {g.button_location && <p>The HomeLink buttons are on the {g.button_location}.</p>}
+      <h3>1. Teach the car your remote</h3>
       <Steps steps={g.steps} />
-      {g.rolling_code_note && <p class="small muted">{g.rolling_code_note}</p>}
-      <Source sample={g.sample} label={g.manual_source ?? `${m.make} owner's manual`} />
+      {g.rolling_code_steps.length > 0 && (
+        <>
+          <h3>2. If the door doesn't move: rolling-code openers</h3>
+          {g.rolling_code_note && <p class="small muted">{g.rolling_code_note}</p>}
+          <Steps steps={g.rolling_code_steps} />
+        </>
+      )}
+      <Source sample={g.sample} url={g.manual_source?.startsWith('http') ? g.manual_source : null} label={`${m.make} ${m.model} owner's manual`} />
     </section>
   ))}
   <section>

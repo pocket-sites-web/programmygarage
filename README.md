@@ -12,8 +12,16 @@ How to program garage door openers, remotes, keypads and car HomeLink buttons, b
 - about, sources, privacy, contact, 404, robots.txt.
 
 ## Data
-`data/garage.json` from the scraper on Jon's PC (`data\garage\out\garage.json`). Keys: `learn_buttons`, `openers`, `remotes`, `cars`; schema in `src/lib/data.ts`. Rows with `"sample": true` are placeholders and show a "Sample data" label. Brand-wide steps (Chamberlain family) live in `src/lib/brands.ts`; an opener's own steps override them.
+`data/garage.json` comes from the scraper on Jon's PC (`data\garage\out\garage.json`, rebuild with `python data\garage\scripts\build_all.py`). Import with:
+
+```
+python scripts/prepare-data.py path/to/garage.json
+```
+
+It fixes text encoding, drops duplicate ids, adds Learn button display colours and tidies remote names. Keys: `learn_buttons`, `openers`, `remotes`, `cars`, `other_brands`; schema in `src/lib/data.ts`. Rows with `"sample": true` show a "Sample data" label.
+
+Data notes (2026-11-10): opener steps are the maker's standard method for that Learn button type, not model-specific. Opener sales years are unknown (`manual_year` is shown instead). Craftsman has no opener records (not on the Chamberlain site). Smaller brands are listed in `other_brands` but not extracted. Cars cover Toyota, Lexus, Nissan, Hyundai and Kia only. Brand-wide steps (Chamberlain family) live in `src/lib/brands.ts`; an opener's own steps override them.
 
 ## Launch switches (`src/lib/site.ts`)
-- `PREVIEW = true`: noindex everywhere, robots.txt blocks all, banner shown. Set to `false` at launch.
+- `PREVIEW`: when true, noindex everywhere, robots.txt blocks all, banner shown. `false` since launch (2026-11-10).
 - `AMAZON_TAG` = booforgen-20.
