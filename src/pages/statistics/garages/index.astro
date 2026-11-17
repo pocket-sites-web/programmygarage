@@ -1,0 +1,94 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/stats.css';
+import KeyStat from '../../../components/stats/KeyStat.astro';
+import Bars from '../../../components/stats/Bars.astro';
+import StateTable from '../../../components/stats/StateTable.astro';
+import Cite from '../../../components/stats/Cite.astro';
+import { garages as G, STATS_UPDATED_LABEL, articleLd, datasetLd, faqLd, RECS_URL, RECS_CITE } from '../../../lib/stats';
+
+type C = { pct: number; se: number; homes_m: number; n_base: number; ok: boolean };
+const path = '/statistics/garages/';
+const title = 'How Many US Homes Have a Garage? Attached Garage Statistics';
+const pct = (c: C) => `${c.pct.toFixed(1)}%`;
+const mil = (c: C) => `${c.homes_m.toFixed(1)} million`;
+const st = G.by_state as Record<string, { all: C; single_family: C; two_plus: C }>;
+const ranked = Object.entries(st).filter(([, v]) => v.all.ok && v.all.n_base >= 30).sort((a, b) => b[1].all.pct - a[1].all.pct);
+const [topSt, topV] = ranked[0];
+const statesOnly = ranked.filter(([s]) => s !== 'District of Columbia');
+const [lowSt, lowV] = statesOnly[statesOnly.length - 1];
+const size = G.size as Record<string, C>;
+const reg = G.by_region as Record<string, C>;
+const ym = G.by_yearmade as Record<string, C>;
+const three = G.threecar_by_yearmade as Record<string, C>;
+const description = `${pct(G.all)} of US homes (${mil(G.all)}) have an attached garage, ${pct(G.single_family)} of houses. Garage size, state rankings, EV owners and more from our analysis of federal survey microdata.`;
+const faq = [
+  ['What percentage of US homes have a garage?', `${pct(G.all)} of all occupied US homes have an attached garage, about ${mil(G.all)}. Among single-family houses the share is ${pct(G.single_family)}. Detached garages aren't counted in the survey, so the share with any garage is higher.`],
+  ['What is the most common garage size?', `The two-car garage: ${pct(size['Two-car'])} of attached garages are two-car, ${pct(size['One-car'])} one-car and ${pct(size['Three-car or larger'])} three-car or larger.`],
+  ['Which state has the most homes with garages?', `${topSt} has the highest share of homes with an attached garage (${pct(topV.all)}). ${lowSt} has the lowest of any state (${pct(lowV.all)}).`],
+  ['Do electric car owners have garages?', `Mostly. ${pct(G.ev)} of households with an electric vehicle have an attached garage, against ${pct(G.non_ev)} of other households, and ${pct(G.ev_charge_home_garage)} of EV owners with a garage charge at home.`],
+];
+const jsonLd = [...articleLd(path, title, description, 'US garages'),
+  datasetLd(path, 'Share of US homes with an attached garage, by state', 'Share of all homes and of single-family homes with an attached garage, and share of garages that are two-car or larger, by US state, from EIA RECS 2020 public microdata with jackknife standard errors.', ['/data/attached-garages-by-state.csv'], RECS_URL, '2020'), faqLd(faq)];
+const toRows = (o: Record<string, C>, sort = false) => { const r = Object.entries(o).map(([k, c]) => ({ label: k, value: c.pct, se: c.se, ok: c.ok && c.n_base >= 30 })); return sort ? r.sort((a, b) => b.value - a.value) : r; };
+const stateRows = Object.entries(st).sort((a, b) => Number(b[1].all.ok) - Number(a[1].all.ok) || b[1].all.pct - a[1].all.pct).map(([s, v]) => ({ label: s, cells: [{ text: `${v.all.pct.toFixed(1)}%`, ok: v.all.ok }, { text: `${v.single_family.pct.toFixed(1)}%`, ok: v.single_family.ok }, { text: `${v.two_plus.pct.toFixed(1)}%`, ok: v.two_plus.ok }] }));
+---
+<Base title={title} description={description} jsonLd={jsonLd}>
+  <section class="st-section">
+    <p class="crumbs"><a href="/">Home</a> › <a href="/statistics/">Statistics</a> › US garages</p>
+    <h1>How many US homes have a garage?</h1>
+    <p class="updated">Updated {STATS_UPDATED_LABEL} · Original analysis of {(G.all.n_base).toLocaleString('en-US')} household records from the federal Residential Energy Consumption Survey</p>
+    <p class="lede">Roughly four in ten American homes, and six in ten houses, have an attached garage. We analysed the US Energy Information Administration's household-level survey data to find out which states have the most garages, how big they are, and who has them.</p>
+    <nav class="toc" aria-label="On this page"><a href="#key-findings">Key findings</a><a href="#size">Garage size</a><a href="#by-state">By state</a><a href="#by-region">By region</a><a href="#home-age">By home age</a><a href="#methodology">Methodology</a><a href="#cite">Cite</a></nav>
+  </section>
+
+  <section class="st-section" id="key-findings">
+    <h2>Key findings</h2>
+    <ul class="kstats">
+      <KeyStat id="homes-with-garage" value={mil(G.all)} source="EIA RECS 2020">US homes have an <b>attached garage</b>, {pct(G.all)} of all occupied homes.</KeyStat>
+      <KeyStat id="houses-with-garage" value={pct(G.single_family)} source="EIA RECS 2020">of <b>single-family houses</b> have an attached garage ({pct(G.detached)} of detached houses).</KeyStat>
+      <KeyStat id="two-car" value={pct(size['Two-car'])} source="EIA RECS 2020">of attached garages are <b>two-car</b> garages, the standard size. {pct(size['Three-car or larger'])} are three-car or larger.</KeyStat>
+      <KeyStat id="top-state" value={pct(topV.all)} source="EIA RECS 2020">of homes in <b>{topSt}</b> have an attached garage, the highest share in the US. {lowSt} has the lowest of any state at {pct(lowV.all)}.</KeyStat>
+      <KeyStat id="three-car-new-homes" value={pct(three['2016 to 2020'])} source="EIA RECS 2020">of garages on homes built <b>2016 to 2020</b> are three-car or larger, up from {pct(three['1970s'])} for homes built in the 1970s.</KeyStat>
+      <KeyStat id="ev-owners" value={pct(G.ev)} source="EIA RECS 2020">of households with an <b>electric vehicle</b> have an attached garage, against {pct(G.non_ev)} of other households.</KeyStat>
+      <KeyStat id="owners-renters" value={pct(G.owners)} source="EIA RECS 2020">of <b>owner-occupied</b> homes have an attached garage, compared with {pct(G.renters)} of rented homes.</KeyStat>
+      <KeyStat id="heated-garages" value={pct(G.heated)} source="EIA RECS 2020">of attached garages are <b>heated</b>, and {pct(G.cooled)} are air-conditioned.</KeyStat>
+    </ul>
+  </section>
+
+  <section class="st-section" id="size">
+    <h2>How big are American garages?</h2>
+    <Bars id="garage-size" caption="Size of attached garages in US homes" rows={toRows(size)} valueLabel="Share of garages" highlight={['Two-car']} />
+    <Bars id="three-car-by-yearbuilt" caption="Share of attached garages that are three-car or larger, by year the home was built" rows={toRows(three)} valueLabel="Three-car or larger" />
+  </section>
+
+  <section class="st-section" id="by-state">
+    <h2>Attached garages by state</h2>
+    <p>Fast-growing Western states such as Utah, Arizona and Idaho have the highest shares. New York, Massachusetts and Maine, with older housing and more apartments, have the lowest. Figures with a relative standard error over 30% are withheld.</p>
+    <StateTable id="garages-by-state" caption="Homes with an attached garage, by state" headers={['State', 'All homes', 'Single-family houses', 'Two-car or larger']} rows={stateRows} csv="/data/attached-garages-by-state.csv" note="Sorted by share of all homes. – = estimate withheld." />
+  </section>
+
+  <section class="st-section" id="by-region">
+    <h2>By region</h2>
+    <Bars id="garages-by-region" caption="Share of homes with an attached garage, by Census region" rows={toRows(reg, true)} valueLabel="Homes with attached garage" />
+  </section>
+
+  <section class="st-section" id="home-age">
+    <h2>Newer homes are more likely to have a garage</h2>
+    <p>Only {pct(ym['Before 1950'])} of homes built before 1950 have an attached garage, against more than half of homes built since the 1990s.</p>
+    <Bars id="garages-by-yearbuilt" caption="Share of homes with an attached garage, by year built" rows={toRows(ym)} valueLabel="Homes with attached garage" />
+  </section>
+
+  <section class="st-section st-faq" id="faq"><h2>Questions</h2>{faq.map(([q, a]) => (<div><h3>{q}</h3><p>{a}</p></div>))}</section>
+
+  <section class="st-section methods" id="methodology">
+    <h2>Methodology</h2>
+    <p>We analysed the public-use microdata of the US Energy Information Administration's 2020 Residential Energy Consumption Survey (RECS): {(G.all.n_base).toLocaleString('en-US')} sampled households representing {G.total_homes_m.toFixed(1)} million occupied homes. The survey asks households in single-family houses whether they have an attached garage (PRKGPLC1) and its size (SIZEOFGARAGE). Apartments and mobile homes are counted as having no attached garage. Detached garages and carports are not covered.</p>
+    <p>Estimates use the final weight (NWEIGHT) and standard errors use EIA's 60 jackknife replicate weights. Estimates with a relative standard error above 30% are withheld. The survey reflects homes in 2020.</p>
+    <h3>Sources</h3>
+    <ul class="st-small"><li><a href={RECS_URL}>{RECS_CITE}</a>.</li></ul>
+  </section>
+
+  <Cite title="US Garage Statistics" path={path} />
+  <section class="st-section"><h2>More statistics</h2><ul class="st-links"><li><a href="/statistics/garage-door-injuries/">Garage door injury statistics</a></li><li><a href="/statistics/">All statistics</a></li></ul></section>
+</Base>

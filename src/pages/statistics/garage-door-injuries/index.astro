@@ -1,0 +1,100 @@
+---
+import Base from '../../../layouts/Base.astro';
+import '../../../styles/stats.css';
+import KeyStat from '../../../components/stats/KeyStat.astro';
+import Bars from '../../../components/stats/Bars.astro';
+import Cite from '../../../components/stats/Cite.astro';
+import { injuries as I, STATS_UPDATED_LABEL, articleLd, datasetLd, faqLd, n0, round100, NEISS_URL, NEISS_CITE } from '../../../lib/stats';
+
+type Est = { est: number; se: number; n: number; ok: boolean };
+const path = '/statistics/garage-door-injuries/';
+const title = 'Garage Door Injury Statistics: US Emergency Room Data';
+const tot = I.total as Est;
+const perYear = Math.round(tot.est / 10);
+const dx = I.by_diagnosis as Record<string, Est>;
+const bp = I.by_body_part as Record<string, Est>;
+const ages = I.by_age as Record<string, Est>;
+const byYear = I.by_year as Record<string, Est>;
+const description = `About ${round100(perYear)} Americans a year go to the ER with a garage door injury: ${round100(tot.est)} in 2015 to 2024. Fingers, crush injuries, children and openers, from our analysis of CPSC hospital data.`;
+const faq = [
+  ['How many people are injured by garage doors each year?', `US emergency departments treat an estimated ${round100(perYear)} garage door injuries a year on average (${round100(tot.est)} from 2015 to 2024), based on the CPSC's national hospital sample.`],
+  ['What is the most common garage door injury?', `Cuts are the most common diagnosis (about ${round100(dx['Cuts (lacerations)'].est)} in ten years), and fingers are the most injured body part. ${I.finger_hand.pct}% of injuries are to the fingers or hand, often caught between door panels or in the track.`],
+  ['Can a garage door cut off a finger?', `Yes. There were an estimated ${round100(I.finger_amputation.est)} finger amputations from garage doors treated in US ERs in 2015 to 2024, mostly fingertips caught between panels, in the track or in the opener chain.`],
+  ['How do I make my garage door safer?', 'Test the auto-reverse each month (a 2x4 laid flat under the door should make it reverse), keep the photo-eye sensors clean and aligned, keep hands away from panel joints, never let children play with the remote, and leave spring repairs to a technician.'],
+];
+const jsonLd = [...articleLd(path, title, description, 'Garage door injuries'),
+  datasetLd(path, 'Estimated US emergency department visits for garage door injuries, by year', 'National estimates of ER-treated injuries involving garage doors and automatic garage door openers, 2015 to 2024, computed from CPSC NEISS public data with design-based standard errors.', ['/data/garage-door-injuries-by-year.csv'], NEISS_URL, '2015/2024'), faqLd(faq)];
+const rowsOf = (o: Record<string, Est>, sort = true) => { const r = Object.entries(o).map(([k, e]) => ({ label: k, value: e.est, se: e.se, ok: e.ok })); return sort ? r.sort((a, b) => b.value - a.value) : r; };
+---
+<Base title={title} description={description} jsonLd={jsonLd}>
+  <section class="st-section">
+    <p class="crumbs"><a href="/">Home</a> › <a href="/statistics/">Statistics</a> › Garage door injuries</p>
+    <h1>Garage door injury statistics: US emergency room data</h1>
+    <p class="updated">Updated {STATS_UPDATED_LABEL} · Original analysis of {n0(tot.n)} hospital case records from the CPSC's National Electronic Injury Surveillance System, 2015 to 2024</p>
+    <p class="lede">A garage door is the largest moving object in most homes. We analysed ten years of the federal hospital injury sample to estimate how many Americans are hurt by garage doors and openers, how they're hurt, and who is most at risk.</p>
+    <nav class="toc" aria-label="On this page"><a href="#key-findings">Key findings</a><a href="#by-year">By year</a><a href="#injury-types">Injury types</a><a href="#body-parts">Body parts</a><a href="#by-age">By age</a><a href="#safety">Safety</a><a href="#methodology">Methodology</a><a href="#cite">Cite</a></nav>
+  </section>
+
+  <section class="st-section" id="key-findings">
+    <h2>Key findings</h2>
+    <ul class="kstats">
+      <KeyStat id="per-year" value={round100(perYear)} source="CPSC NEISS, 2015 to 2024">estimated US <b>emergency room visits a year</b> for garage door injuries on average, {round100(tot.est)} over ten years.</KeyStat>
+      <KeyStat id="fingers-hands" value={`${I.finger_hand.pct}%`} source="CPSC NEISS">of garage door injuries are to the <b>fingers or hand</b>, the most commonly injured parts of the body.</KeyStat>
+      <KeyStat id="finger-amputations" value={round100(I.finger_amputation.est)} source="CPSC NEISS, 2015 to 2024">estimated <b>finger amputations</b> (mostly fingertips) caused by garage doors in ten years.</KeyStat>
+      <KeyStat id="struck" value={round100(I.struck.est)} source="CPSC NEISS, 2015 to 2024">injuries happened when a <b>door came down on</b> or struck someone, many of them to the head.</KeyStat>
+      <KeyStat id="children" value={round100(I.under15.est)} source="CPSC NEISS, 2015 to 2024"><b>children under 15</b> were treated in the ER for garage door injuries in ten years.</KeyStat>
+      <KeyStat id="openers" value={round100((I.automatic as Est).est)} source="CPSC NEISS, 2015 to 2024">injuries were coded to an <b>automatic door or opener</b>; the rest involved the door itself, its panels, springs or tracks.</KeyStat>
+      <KeyStat id="over-45" value={`${Math.round(100 * (ages['45 to 64'].est + ages['65 and over'].est) / tot.est)}%`} source="CPSC NEISS">of patients are <b>45 or older</b>; adults 65 and over alone account for {round100(ages['65 and over'].est)} visits.</KeyStat>
+      <KeyStat id="springs" value={round100(I.spring.est)} source="CPSC NEISS, 2015 to 2024">injuries mention a <b>spring</b>, the high-tension part that should only be repaired by a professional.</KeyStat>
+    </ul>
+  </section>
+
+  <section class="st-section" id="by-year">
+    <h2>Garage door injuries by year</h2>
+    <p>Injuries dipped in 2020 and 2021 and have since returned towards pre-pandemic levels. Single years have wide margins, so the ten-year total is the most reliable figure.</p>
+    <Bars id="injuries-by-year" caption="Estimated US ER visits for garage door injuries, by year" rows={rowsOf(byYear, false)} format="count" valueLabel="Estimated ER visits" note="± is the 95% margin of error." />
+    <p class="st-small"><a href="/data/garage-door-injuries-by-year.csv" download>Download the yearly estimates (CSV)</a></p>
+  </section>
+
+  <section class="st-section" id="injury-types">
+    <h2>Types of garage door injury</h2>
+    <p>Cuts and fractures lead, followed by internal injuries (which in this data are mostly closed head injuries from being struck by a door) and bruises.</p>
+    <Bars id="by-diagnosis" caption="Garage door injuries by diagnosis, 2015 to 2024" rows={rowsOf(dx)} format="count" valueLabel="Estimated ER visits" />
+  </section>
+
+  <section class="st-section" id="body-parts">
+    <h2>Which parts of the body are hurt</h2>
+    <Bars id="by-body-part" caption="Garage door injuries by body part, 2015 to 2024" rows={rowsOf(bp)} format="count" valueLabel="Estimated ER visits" highlight={['Fingers', 'Hand']} />
+  </section>
+
+  <section class="st-section" id="by-age">
+    <h2>Who gets hurt</h2>
+    <p>Garage door injuries mostly affect adults, and the risk stays high into old age. {I.male.pct}% of patients are male. {I.admitted.pct}% were admitted, transferred or held for observation.</p>
+    <Bars id="by-age-group" caption="Garage door injuries by age, 2015 to 2024" rows={rowsOf(ages, false)} format="count" valueLabel="Estimated ER visits" />
+  </section>
+
+  <section class="st-section" id="safety">
+    <h2>How to avoid a garage door injury</h2>
+    <ul>
+      <li>Test the auto-reverse monthly: lay a 2x4 flat under the door and close it. It should reverse on contact.</li>
+      <li>Keep the photo-eye safety sensors clean and lined up, and never bypass them.</li>
+      <li>Keep fingers away from the joints between panels and from the tracks and rollers.</li>
+      <li>Keep remotes and wall buttons out of children's reach, and teach them not to run under a closing door.</li>
+      <li>Leave torsion and extension springs, cables and drums to a trained technician.</li>
+    </ul>
+    <p>New remote or opener to set up? <a href="/">Find the programming steps for your opener</a>.</p>
+  </section>
+
+  <section class="st-section st-faq" id="faq"><h2>Questions</h2>{faq.map(([q, a]) => (<div><h3>{q}</h3><p>{a}</p></div>))}</section>
+
+  <section class="st-section methods" id="methodology">
+    <h2>Methodology</h2>
+    <p>The National Electronic Injury Surveillance System (NEISS) is a probability sample of about 100 US hospital emergency departments run by the Consumer Product Safety Commission. We downloaded the public case files for 2015 to 2024 and selected cases involving garage doors (product code 1886) or automatic garage doors and openers (code 138): {n0(tot.n)} sampled cases.</p>
+    <p>National estimates are the sum of case weights. Standard errors account for the stratified hospital sample. We follow CPSC's rule and flag estimates based on fewer than 20 cases, below 1,200 or with a coefficient of variation over 33%. Groupings such as "door came down on someone", "spring" or "ladder" are found by searching the case narratives, so they are lower bounds. NEISS counts ER visits only, not urgent care or doctors' offices.</p>
+    <h3>Sources</h3>
+    <ul class="st-small"><li><a href={NEISS_URL}>{NEISS_CITE}</a>.</li></ul>
+  </section>
+
+  <Cite title="Garage Door Injury Statistics" path={path} />
+  <section class="st-section"><h2>More statistics</h2><ul class="st-links"><li><a href="/statistics/garages/">US garage statistics</a></li><li><a href="/statistics/">All statistics</a></li></ul></section>
+</Base>
