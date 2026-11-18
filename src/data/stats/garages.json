@@ -1,0 +1,1438 @@
+{
+ "total_homes_m": 123.53,
+ "all": {
+  "pct": 41.9,
+  "se": 0.3,
+  "homes_m": 51.79,
+  "n_base": 18496,
+  "ok": true
+ },
+ "single_family": {
+  "pct": 61.3,
+  "se": 0.5,
+  "homes_m": 51.79,
+  "n_base": 14070,
+  "ok": true
+ },
+ "detached": {
+  "pct": 62.5,
+  "se": 0.5,
+  "homes_m": 48.19,
+  "n_base": 12319,
+  "ok": true
+ },
+ "attached_house": {
+  "pct": 48.3,
+  "se": 1.6,
+  "homes_m": 3.6,
+  "n_base": 1751,
+  "ok": true
+ },
+ "size": {
+  "One-car": {
+   "pct": 21.8,
+   "se": 0.5,
+   "homes_m": 11.27,
+   "n_base": 8820,
+   "ok": true
+  },
+  "Two-car": {
+   "pct": 66.0,
+   "se": 0.6,
+   "homes_m": 34.18,
+   "n_base": 8820,
+   "ok": true
+  },
+  "Three-car or larger": {
+   "pct": 12.2,
+   "se": 0.4,
+   "homes_m": 6.34,
+   "n_base": 8820,
+   "ok": true
+  }
+ },
+ "heated": {
+  "pct": 7.5,
+  "se": 0.3,
+  "homes_m": 3.87,
+  "n_base": 8820,
+  "ok": true
+ },
+ "cooled": {
+  "pct": 3.2,
+  "se": 0.2,
+  "homes_m": 1.64,
+  "n_base": 8820,
+  "ok": true
+ },
+ "owners": {
+  "pct": 56.7,
+  "se": 0.5,
+  "homes_m": 47.02,
+  "n_base": 13450,
+  "ok": true
+ },
+ "renters": {
+  "pct": 11.8,
+  "se": 0.4,
+  "homes_m": 4.77,
+  "n_base": 5046,
+  "ok": true
+ },
+ "ev": {
+  "pct": 64.4,
+  "se": 3.4,
+  "homes_m": 1.17,
+  "n_base": 286,
+  "ok": true
+ },
+ "non_ev": {
+  "pct": 41.6,
+  "se": 0.3,
+  "homes_m": 50.62,
+  "n_base": 18210,
+  "ok": true
+ },
+ "ev_charge_home_garage": {
+  "pct": 89.3,
+  "se": 2.6,
+  "homes_m": 1.05,
+  "n_base": 189,
+  "ok": true
+ },
+ "by_region": {
+  "Northeast": {
+   "pct": 31.3,
+   "se": 0.6,
+   "homes_m": 6.86,
+   "n_base": 3657,
+   "ok": true
+  },
+  "Midwest": {
+   "pct": 45.6,
+   "se": 0.6,
+   "homes_m": 12.32,
+   "n_base": 3832,
+   "ok": true
+  },
+  "South": {
+   "pct": 40.8,
+   "se": 0.5,
+   "homes_m": 19.13,
+   "n_base": 6426,
+   "ok": true
+  },
+  "West": {
+   "pct": 48.6,
+   "se": 0.5,
+   "homes_m": 13.48,
+   "n_base": 4581,
+   "ok": true
+  }
+ },
+ "by_yearmade": {
+  "Before 1950": {
+   "pct": 15.0,
+   "se": 0.8,
+   "homes_m": 3.05,
+   "n_base": 2721,
+   "ok": true
+  },
+  "1950s": {
+   "pct": 38.7,
+   "se": 1.3,
+   "homes_m": 4.83,
+   "n_base": 1685,
+   "ok": true
+  },
+  "1960s": {
+   "pct": 39.8,
+   "se": 1.3,
+   "homes_m": 5.08,
+   "n_base": 1867,
+   "ok": true
+  },
+  "1970s": {
+   "pct": 40.9,
+   "se": 1.1,
+   "homes_m": 7.51,
+   "n_base": 2817,
+   "ok": true
+  },
+  "1980s": {
+   "pct": 41.9,
+   "se": 1.0,
+   "homes_m": 6.83,
+   "n_base": 2435,
+   "ok": true
+  },
+  "1990s": {
+   "pct": 55.0,
+   "se": 1.2,
+   "homes_m": 9.43,
+   "n_base": 2451,
+   "ok": true
+  },
+  "2000s": {
+   "pct": 59.5,
+   "se": 1.2,
+   "homes_m": 9.61,
+   "n_base": 2748,
+   "ok": true
+  },
+  "2010 to 2015": {
+   "pct": 52.6,
+   "se": 1.9,
+   "homes_m": 2.91,
+   "n_base": 989,
+   "ok": true
+  },
+  "2016 to 2020": {
+   "pct": 56.0,
+   "se": 2.2,
+   "homes_m": 2.55,
+   "n_base": 783,
+   "ok": true
+  }
+ },
+ "threecar_by_yearmade": {
+  "Before 1950": {
+   "pct": 3.3,
+   "se": 0.8,
+   "homes_m": 0.1,
+   "n_base": 433,
+   "ok": true
+  },
+  "1950s": {
+   "pct": 3.4,
+   "se": 0.7,
+   "homes_m": 0.16,
+   "n_base": 685,
+   "ok": true
+  },
+  "1960s": {
+   "pct": 3.0,
+   "se": 0.7,
+   "homes_m": 0.15,
+   "n_base": 835,
+   "ok": true
+  },
+  "1970s": {
+   "pct": 4.0,
+   "se": 0.6,
+   "homes_m": 0.3,
+   "n_base": 1325,
+   "ok": true
+  },
+  "1980s": {
+   "pct": 9.3,
+   "se": 0.9,
+   "homes_m": 0.63,
+   "n_base": 1171,
+   "ok": true
+  },
+  "1990s": {
+   "pct": 15.4,
+   "se": 1.1,
+   "homes_m": 1.45,
+   "n_base": 1473,
+   "ok": true
+  },
+  "2000s": {
+   "pct": 22.1,
+   "se": 1.3,
+   "homes_m": 2.13,
+   "n_base": 1800,
+   "ok": true
+  },
+  "2010 to 2015": {
+   "pct": 24.5,
+   "se": 1.8,
+   "homes_m": 0.71,
+   "n_base": 590,
+   "ok": true
+  },
+  "2016 to 2020": {
+   "pct": 27.4,
+   "se": 2.3,
+   "homes_m": 0.7,
+   "n_base": 508,
+   "ok": true
+  }
+ },
+ "by_state": {
+  "Alabama": {
+   "all": {
+    "pct": 29.2,
+    "se": 3.4,
+    "homes_m": 0.56,
+    "n_base": 242,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 41.4,
+    "se": 4.4,
+    "homes_m": 0.56,
+    "n_base": 178,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 74.6,
+    "se": 4.9,
+    "homes_m": 0.41,
+    "n_base": 76,
+    "ok": true
+   }
+  },
+  "Alaska": {
+   "all": {
+    "pct": 48.6,
+    "se": 2.9,
+    "homes_m": 0.12,
+    "n_base": 311,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 66.6,
+    "se": 2.9,
+    "homes_m": 0.12,
+    "n_base": 246,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 69.1,
+    "se": 3.8,
+    "homes_m": 0.09,
+    "n_base": 168,
+    "ok": true
+   }
+  },
+  "Arizona": {
+   "all": {
+    "pct": 57.4,
+    "se": 1.8,
+    "homes_m": 1.54,
+    "n_base": 495,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 80.1,
+    "se": 2.0,
+    "homes_m": 1.54,
+    "n_base": 395,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 91.6,
+    "se": 1.5,
+    "homes_m": 1.41,
+    "n_base": 321,
+    "ok": true
+   }
+  },
+  "Arkansas": {
+   "all": {
+    "pct": 42.3,
+    "se": 3.1,
+    "homes_m": 0.48,
+    "n_base": 268,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 55.4,
+    "se": 3.3,
+    "homes_m": 0.48,
+    "n_base": 222,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 81.2,
+    "se": 3.7,
+    "homes_m": 0.39,
+    "n_base": 128,
+    "ok": true
+   }
+  },
+  "California": {
+   "all": {
+    "pct": 47.3,
+    "se": 1.1,
+    "homes_m": 6.24,
+    "n_base": 1152,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 72.9,
+    "se": 1.5,
+    "homes_m": 6.24,
+    "n_base": 837,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 81.6,
+    "se": 1.7,
+    "homes_m": 5.09,
+    "n_base": 627,
+    "ok": true
+   }
+  },
+  "Colorado": {
+   "all": {
+    "pct": 51.1,
+    "se": 1.9,
+    "homes_m": 1.16,
+    "n_base": 360,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 73.1,
+    "se": 2.2,
+    "homes_m": 1.16,
+    "n_base": 277,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 83.2,
+    "se": 2.6,
+    "homes_m": 0.96,
+    "n_base": 209,
+    "ok": true
+   }
+  },
+  "Connecticut": {
+   "all": {
+    "pct": 37.7,
+    "se": 2.7,
+    "homes_m": 0.52,
+    "n_base": 294,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 57.2,
+    "se": 3.2,
+    "homes_m": 0.52,
+    "n_base": 231,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 66.8,
+    "se": 4.0,
+    "homes_m": 0.35,
+    "n_base": 140,
+    "ok": true
+   }
+  },
+  "Delaware": {
+   "all": {
+    "pct": 48.8,
+    "se": 4.7,
+    "homes_m": 0.19,
+    "n_base": 143,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 65.7,
+    "se": 5.0,
+    "homes_m": 0.19,
+    "n_base": 113,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 78.2,
+    "se": 6.1,
+    "homes_m": 0.14,
+    "n_base": 78,
+    "ok": true
+   }
+  },
+  "District of Columbia": {
+   "all": {
+    "pct": 6.6,
+    "se": 1.6,
+    "homes_m": 0.02,
+    "n_base": 221,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 24.1,
+    "se": 5.1,
+    "homes_m": 0.02,
+    "n_base": 81,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 25.0,
+    "se": 9.5,
+    "homes_m": 0.01,
+    "n_base": 20,
+    "ok": false
+   }
+  },
+  "Florida": {
+   "all": {
+    "pct": 47.3,
+    "se": 1.8,
+    "homes_m": 3.82,
+    "n_base": 655,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 73.7,
+    "se": 2.0,
+    "homes_m": 3.82,
+    "n_base": 469,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 75.0,
+    "se": 2.1,
+    "homes_m": 2.86,
+    "n_base": 355,
+    "ok": true
+   }
+  },
+  "Georgia": {
+   "all": {
+    "pct": 44.4,
+    "se": 2.7,
+    "homes_m": 1.72,
+    "n_base": 417,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 58.3,
+    "se": 2.9,
+    "homes_m": 1.72,
+    "n_base": 339,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 83.5,
+    "se": 2.7,
+    "homes_m": 1.44,
+    "n_base": 207,
+    "ok": true
+   }
+  },
+  "Hawaii": {
+   "all": {
+    "pct": 45.9,
+    "se": 2.9,
+    "homes_m": 0.22,
+    "n_base": 282,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 70.2,
+    "se": 3.1,
+    "homes_m": 0.22,
+    "n_base": 206,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 78.3,
+    "se": 3.4,
+    "homes_m": 0.17,
+    "n_base": 147,
+    "ok": true
+   }
+  },
+  "Idaho": {
+   "all": {
+    "pct": 55.9,
+    "se": 3.7,
+    "homes_m": 0.37,
+    "n_base": 270,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 71.8,
+    "se": 3.2,
+    "homes_m": 0.37,
+    "n_base": 225,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 86.9,
+    "se": 3.0,
+    "homes_m": 0.32,
+    "n_base": 167,
+    "ok": true
+   }
+  },
+  "Illinois": {
+   "all": {
+    "pct": 36.6,
+    "se": 1.8,
+    "homes_m": 1.79,
+    "n_base": 530,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 58.1,
+    "se": 2.4,
+    "homes_m": 1.79,
+    "n_base": 387,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 83.8,
+    "se": 2.7,
+    "homes_m": 1.5,
+    "n_base": 242,
+    "ok": true
+   }
+  },
+  "Indiana": {
+   "all": {
+    "pct": 51.1,
+    "se": 2.4,
+    "homes_m": 1.33,
+    "n_base": 400,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 62.8,
+    "se": 2.4,
+    "homes_m": 1.33,
+    "n_base": 352,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 83.0,
+    "se": 2.6,
+    "homes_m": 1.1,
+    "n_base": 235,
+    "ok": true
+   }
+  },
+  "Iowa": {
+   "all": {
+    "pct": 45.9,
+    "se": 3.4,
+    "homes_m": 0.59,
+    "n_base": 286,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 56.8,
+    "se": 3.8,
+    "homes_m": 0.59,
+    "n_base": 251,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 82.7,
+    "se": 3.2,
+    "homes_m": 0.49,
+    "n_base": 154,
+    "ok": true
+   }
+  },
+  "Kansas": {
+   "all": {
+    "pct": 53.4,
+    "se": 3.5,
+    "homes_m": 0.6,
+    "n_base": 208,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 71.5,
+    "se": 3.4,
+    "homes_m": 0.6,
+    "n_base": 171,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 72.3,
+    "se": 3.7,
+    "homes_m": 0.44,
+    "n_base": 127,
+    "ok": true
+   }
+  },
+  "Kentucky": {
+   "all": {
+    "pct": 34.6,
+    "se": 2.0,
+    "homes_m": 0.6,
+    "n_base": 428,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 45.4,
+    "se": 2.2,
+    "homes_m": 0.6,
+    "n_base": 344,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 72.8,
+    "se": 3.8,
+    "homes_m": 0.44,
+    "n_base": 163,
+    "ok": true
+   }
+  },
+  "Louisiana": {
+   "all": {
+    "pct": 30.5,
+    "se": 2.4,
+    "homes_m": 0.53,
+    "n_base": 311,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 43.9,
+    "se": 2.9,
+    "homes_m": 0.53,
+    "n_base": 234,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 86.8,
+    "se": 3.1,
+    "homes_m": 0.46,
+    "n_base": 109,
+    "ok": true
+   }
+  },
+  "Maine": {
+   "all": {
+    "pct": 26.7,
+    "se": 2.5,
+    "homes_m": 0.15,
+    "n_base": 223,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 40.1,
+    "se": 3.1,
+    "homes_m": 0.15,
+    "n_base": 168,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 76.9,
+    "se": 5.1,
+    "homes_m": 0.12,
+    "n_base": 71,
+    "ok": true
+   }
+  },
+  "Maryland": {
+   "all": {
+    "pct": 32.4,
+    "se": 2.5,
+    "homes_m": 0.74,
+    "n_base": 359,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 46.8,
+    "se": 3.0,
+    "homes_m": 0.74,
+    "n_base": 280,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 70.7,
+    "se": 4.5,
+    "homes_m": 0.52,
+    "n_base": 135,
+    "ok": true
+   }
+  },
+  "Massachusetts": {
+   "all": {
+    "pct": 26.5,
+    "se": 1.6,
+    "homes_m": 0.72,
+    "n_base": 552,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 46.5,
+    "se": 2.3,
+    "homes_m": 0.72,
+    "n_base": 388,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 68.6,
+    "se": 3.9,
+    "homes_m": 0.49,
+    "n_base": 194,
+    "ok": true
+   }
+  },
+  "Michigan": {
+   "all": {
+    "pct": 43.2,
+    "se": 2.9,
+    "homes_m": 1.69,
+    "n_base": 388,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 56.2,
+    "se": 3.2,
+    "homes_m": 1.69,
+    "n_base": 319,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 86.5,
+    "se": 2.9,
+    "homes_m": 1.46,
+    "n_base": 191,
+    "ok": true
+   }
+  },
+  "Minnesota": {
+   "all": {
+    "pct": 48.2,
+    "se": 3.0,
+    "homes_m": 1.08,
+    "n_base": 325,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 64.0,
+    "se": 3.2,
+    "homes_m": 1.08,
+    "n_base": 268,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 81.9,
+    "se": 3.0,
+    "homes_m": 0.88,
+    "n_base": 179,
+    "ok": true
+   }
+  },
+  "Mississippi": {
+   "all": {
+    "pct": 36.9,
+    "se": 3.7,
+    "homes_m": 0.4,
+    "n_base": 168,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 54.6,
+    "se": 5.1,
+    "homes_m": 0.4,
+    "n_base": 123,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 87.9,
+    "se": 3.9,
+    "homes_m": 0.35,
+    "n_base": 69,
+    "ok": true
+   }
+  },
+  "Missouri": {
+   "all": {
+    "pct": 49.7,
+    "se": 2.6,
+    "homes_m": 1.21,
+    "n_base": 296,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 65.2,
+    "se": 3.1,
+    "homes_m": 1.21,
+    "n_base": 243,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 78.5,
+    "se": 3.7,
+    "homes_m": 0.95,
+    "n_base": 168,
+    "ok": true
+   }
+  },
+  "Montana": {
+   "all": {
+    "pct": 38.4,
+    "se": 3.5,
+    "homes_m": 0.17,
+    "n_base": 172,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 53.9,
+    "se": 4.2,
+    "homes_m": 0.17,
+    "n_base": 133,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 83.9,
+    "se": 4.3,
+    "homes_m": 0.14,
+    "n_base": 75,
+    "ok": true
+   }
+  },
+  "Nebraska": {
+   "all": {
+    "pct": 47.6,
+    "se": 3.8,
+    "homes_m": 0.36,
+    "n_base": 189,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 65.9,
+    "se": 3.7,
+    "homes_m": 0.36,
+    "n_base": 154,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 77.7,
+    "se": 4.4,
+    "homes_m": 0.28,
+    "n_base": 106,
+    "ok": true
+   }
+  },
+  "Nevada": {
+   "all": {
+    "pct": 53.1,
+    "se": 3.3,
+    "homes_m": 0.6,
+    "n_base": 231,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 84.0,
+    "se": 2.7,
+    "homes_m": 0.6,
+    "n_base": 173,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 88.8,
+    "se": 2.9,
+    "homes_m": 0.54,
+    "n_base": 145,
+    "ok": true
+   }
+  },
+  "New Hampshire": {
+   "all": {
+    "pct": 33.9,
+    "se": 3.8,
+    "homes_m": 0.18,
+    "n_base": 175,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 49.5,
+    "se": 4.7,
+    "homes_m": 0.18,
+    "n_base": 132,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 69.9,
+    "se": 6.1,
+    "homes_m": 0.13,
+    "n_base": 66,
+    "ok": true
+   }
+  },
+  "New Jersey": {
+   "all": {
+    "pct": 37.0,
+    "se": 2.1,
+    "homes_m": 1.26,
+    "n_base": 456,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 58.5,
+    "se": 2.8,
+    "homes_m": 1.26,
+    "n_base": 335,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 58.0,
+    "se": 3.7,
+    "homes_m": 0.73,
+    "n_base": 214,
+    "ok": true
+   }
+  },
+  "New Mexico": {
+   "all": {
+    "pct": 48.3,
+    "se": 3.6,
+    "homes_m": 0.38,
+    "n_base": 178,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 70.7,
+    "se": 4.2,
+    "homes_m": 0.38,
+    "n_base": 134,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 82.3,
+    "se": 3.8,
+    "homes_m": 0.31,
+    "n_base": 96,
+    "ok": true
+   }
+  },
+  "New York": {
+   "all": {
+    "pct": 24.2,
+    "se": 1.2,
+    "homes_m": 1.82,
+    "n_base": 904,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 52.3,
+    "se": 2.3,
+    "homes_m": 1.82,
+    "n_base": 535,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 56.0,
+    "se": 2.7,
+    "homes_m": 1.02,
+    "n_base": 304,
+    "ok": true
+   }
+  },
+  "North Carolina": {
+   "all": {
+    "pct": 38.5,
+    "se": 2.2,
+    "homes_m": 1.54,
+    "n_base": 479,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 52.6,
+    "se": 2.4,
+    "homes_m": 1.54,
+    "n_base": 378,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 80.6,
+    "se": 2.7,
+    "homes_m": 1.24,
+    "n_base": 210,
+    "ok": true
+   }
+  },
+  "North Dakota": {
+   "all": {
+    "pct": 45.2,
+    "se": 3.1,
+    "homes_m": 0.14,
+    "n_base": 331,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 71.1,
+    "se": 3.2,
+    "homes_m": 0.14,
+    "n_base": 240,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 83.7,
+    "se": 3.4,
+    "homes_m": 0.12,
+    "n_base": 177,
+    "ok": true
+   }
+  },
+  "Ohio": {
+   "all": {
+    "pct": 49.0,
+    "se": 2.3,
+    "homes_m": 2.32,
+    "n_base": 339,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 65.5,
+    "se": 2.9,
+    "homes_m": 2.32,
+    "n_base": 276,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 79.3,
+    "se": 2.9,
+    "homes_m": 1.84,
+    "n_base": 190,
+    "ok": true
+   }
+  },
+  "Oklahoma": {
+   "all": {
+    "pct": 52.9,
+    "se": 3.0,
+    "homes_m": 0.79,
+    "n_base": 232,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 70.0,
+    "se": 3.5,
+    "homes_m": 0.79,
+    "n_base": 190,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 80.2,
+    "se": 3.1,
+    "homes_m": 0.63,
+    "n_base": 138,
+    "ok": true
+   }
+  },
+  "Oregon": {
+   "all": {
+    "pct": 46.9,
+    "se": 2.6,
+    "homes_m": 0.78,
+    "n_base": 313,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 66.4,
+    "se": 2.9,
+    "homes_m": 0.78,
+    "n_base": 238,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 81.8,
+    "se": 3.3,
+    "homes_m": 0.63,
+    "n_base": 163,
+    "ok": true
+   }
+  },
+  "Pennsylvania": {
+   "all": {
+    "pct": 39.3,
+    "se": 1.6,
+    "homes_m": 2.02,
+    "n_base": 617,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 51.6,
+    "se": 2.2,
+    "homes_m": 2.02,
+    "n_base": 500,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 57.6,
+    "se": 3.1,
+    "homes_m": 1.16,
+    "n_base": 280,
+    "ok": true
+   }
+  },
+  "Rhode Island": {
+   "all": {
+    "pct": 28.3,
+    "se": 3.3,
+    "homes_m": 0.12,
+    "n_base": 191,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 44.7,
+    "se": 4.5,
+    "homes_m": 0.12,
+    "n_base": 144,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 65.8,
+    "se": 5.8,
+    "homes_m": 0.08,
+    "n_base": 68,
+    "ok": true
+   }
+  },
+  "South Carolina": {
+   "all": {
+    "pct": 34.2,
+    "se": 2.5,
+    "homes_m": 0.67,
+    "n_base": 334,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 49.0,
+    "se": 3.1,
+    "homes_m": 0.67,
+    "n_base": 248,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 77.3,
+    "se": 3.8,
+    "homes_m": 0.52,
+    "n_base": 126,
+    "ok": true
+   }
+  },
+  "South Dakota": {
+   "all": {
+    "pct": 51.1,
+    "se": 4.0,
+    "homes_m": 0.18,
+    "n_base": 183,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 70.2,
+    "se": 3.7,
+    "homes_m": 0.18,
+    "n_base": 149,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 78.7,
+    "se": 4.4,
+    "homes_m": 0.14,
+    "n_base": 109,
+    "ok": true
+   }
+  },
+  "Tennessee": {
+   "all": {
+    "pct": 38.3,
+    "se": 2.0,
+    "homes_m": 1.02,
+    "n_base": 505,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 51.9,
+    "se": 2.3,
+    "homes_m": 1.02,
+    "n_base": 396,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 81.8,
+    "se": 2.6,
+    "homes_m": 0.83,
+    "n_base": 211,
+    "ok": true
+   }
+  },
+  "Texas": {
+   "all": {
+    "pct": 46.6,
+    "se": 1.2,
+    "homes_m": 4.78,
+    "n_base": 1016,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 68.0,
+    "se": 1.6,
+    "homes_m": 4.78,
+    "n_base": 774,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 83.9,
+    "se": 1.5,
+    "homes_m": 4.01,
+    "n_base": 544,
+    "ok": true
+   }
+  },
+  "Utah": {
+   "all": {
+    "pct": 59.4,
+    "se": 3.8,
+    "homes_m": 0.62,
+    "n_base": 188,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 75.8,
+    "se": 3.3,
+    "homes_m": 0.62,
+    "n_base": 165,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 85.4,
+    "se": 3.3,
+    "homes_m": 0.53,
+    "n_base": 127,
+    "ok": true
+   }
+  },
+  "Vermont": {
+   "all": {
+    "pct": 28.1,
+    "se": 2.5,
+    "homes_m": 0.07,
+    "n_base": 245,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 42.9,
+    "se": 3.5,
+    "homes_m": 0.07,
+    "n_base": 181,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 70.1,
+    "se": 5.3,
+    "homes_m": 0.05,
+    "n_base": 79,
+    "ok": true
+   }
+  },
+  "Virginia": {
+   "all": {
+    "pct": 33.6,
+    "se": 2.0,
+    "homes_m": 1.09,
+    "n_base": 451,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 48.0,
+    "se": 2.7,
+    "homes_m": 1.09,
+    "n_base": 344,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 67.9,
+    "se": 3.4,
+    "homes_m": 0.74,
+    "n_base": 172,
+    "ok": true
+   }
+  },
+  "Washington": {
+   "all": {
+    "pct": 40.5,
+    "se": 2.5,
+    "homes_m": 1.19,
+    "n_base": 439,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 63.3,
+    "se": 3.0,
+    "homes_m": 1.19,
+    "n_base": 315,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 80.5,
+    "se": 2.8,
+    "homes_m": 0.96,
+    "n_base": 209,
+    "ok": true
+   }
+  },
+  "West Virginia": {
+   "all": {
+    "pct": 26.9,
+    "se": 2.8,
+    "homes_m": 0.19,
+    "n_base": 197,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 36.7,
+    "se": 3.7,
+    "homes_m": 0.19,
+    "n_base": 151,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 72.3,
+    "se": 6.2,
+    "homes_m": 0.14,
+    "n_base": 60,
+    "ok": true
+   }
+  },
+  "Wisconsin": {
+   "all": {
+    "pct": 42.9,
+    "se": 2.9,
+    "homes_m": 1.02,
+    "n_base": 357,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 58.8,
+    "se": 3.3,
+    "homes_m": 1.02,
+    "n_base": 285,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 80.2,
+    "se": 3.1,
+    "homes_m": 0.82,
+    "n_base": 174,
+    "ok": true
+   }
+  },
+  "Wyoming": {
+   "all": {
+    "pct": 44.9,
+    "se": 4.0,
+    "homes_m": 0.1,
+    "n_base": 190,
+    "ok": true
+   },
+   "single_family": {
+    "pct": 60.4,
+    "se": 4.2,
+    "homes_m": 0.1,
+    "n_base": 153,
+    "ok": true
+   },
+   "two_plus": {
+    "pct": 77.5,
+    "se": 4.4,
+    "homes_m": 0.08,
+    "n_base": 97,
+    "ok": true
+   }
+  }
+ }
+}
