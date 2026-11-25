@@ -3,7 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import Lb from '../../../components/Lb.astro';
 import Steps from '../../../components/Steps.astro';
 import Source from '../../../components/Source.astro';
-import { remotes, getLearnButton, openersWithButton, openerHref, slugify, remoteName, type Remote } from '../../../lib/data';
+import { remotes, getLearnButton, openersWithButton, openerHref, slugify, remoteName, openerLead, openerGroup, type Remote } from '../../../lib/data';
 import { getBrand } from '../../../lib/brands';
 import { amazonUrl } from '../../../lib/site';
 export function getStaticPaths() {
@@ -13,7 +13,8 @@ const { r } = Astro.props as { r: Remote };
 const lbs = r.works_with_learn_buttons.map((id) => getLearnButton(id)).filter(Boolean);
 const brand = getBrand(slugify(r.brand));
 const steps = r.steps?.length ? r.steps : r.kind === 'keypad' ? brand?.steps.keypad : brand?.steps.remote;
-const ops = lbs.flatMap((l) => openersWithButton(l!.id)).slice(0, 60);
+// One link per group of openers that program the same way (the group's lead page).
+const ops = [...new Set(lbs.flatMap((l) => openersWithButton(l!.id)).map((o) => openerLead(o)))].slice(0, 60);
 const opsTotal = lbs.reduce((n, l) => n + openersWithButton(l!.id).length, 0);
 const kind = r.kind === 'keypad' ? 'Keypad' : 'Remote';
 const name = remoteName(r);
@@ -45,8 +46,8 @@ const name = remoteName(r);
   {ops.length > 0 && (
     <section>
       <h2>Openers it works with</h2>
-      {opsTotal > ops.length && <p class="small muted">Showing {ops.length} of {opsTotal}. Any opener with a matching Learn button colour works.</p>}
-      <ul class="link-grid">{ops.map((o) => <li><a class="mono" href={openerHref(o)}>{o.brand} {o.model}</a></li>)}</ul>
+      <p class="small muted">{opsTotal} openers in all, grouped where models program the same way. Any opener with a matching Learn button colour works.</p>
+      <ul class="link-grid">{ops.map((o) => <li><a class="mono" href={openerHref(o)}>{o.brand} {o.model}</a>{openerGroup(o).length > 1 && <span class="small muted"> +{openerGroup(o).length - 1} similar</span>}</li>)}</ul>
     </section>
   )}
 </Base>

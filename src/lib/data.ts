@@ -185,3 +185,24 @@ export const yearSpan = (years: number[]) => {
   const s = [...years].sort((a, b) => a - b);
   return s[0] === s[s.length - 1] ? `${s[0]}` : `${s[0]} to ${s[s.length - 1]}`;
 };
+
+// ---- Near-duplicate grouping ---------------------------------------------------------------
+// Many model numbers program exactly the same way. Each group keeps one indexed page (the
+// "lead" model) that lists the others; the rest stay on the site but are noindexed.
+const openerSig = (o: Opener) =>
+  JSON.stringify([slugify(o.brand), o.learn_button, o.learn_button_location, o.steps, o.type, o.myq, o.battery_backup, o.wifi ?? null, o.smart_app ?? null, remotesForOpener(o).map((r) => r.id).sort()]);
+const leadOrder = (a: Opener, b: Opener) => a.model.length - b.model.length || a.model.localeCompare(b.model, 'en', { numeric: true });
+let openerGroups: Map<string, Opener[]> | null = null;
+export function openerGroup(o: Opener): Opener[] {
+  if (!openerGroups) {
+    openerGroups = new Map();
+    for (const x of openers) {
+      const k = openerSig(x);
+      openerGroups.set(k, [...(openerGroups.get(k) ?? []), x]);
+    }
+    for (const g of openerGroups.values()) g.sort(leadOrder);
+  }
+  return openerGroups.get(openerSig(o)) ?? [o];
+}
+export const openerLead = (o: Opener) => openerGroup(o)[0];
+

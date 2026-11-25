@@ -6,7 +6,7 @@ import BuyBox from '../../../components/BuyBox.astro';
 import Source from '../../../components/Source.astro';
 import Safety from '../../../components/Safety.astro';
 import { activeBrands, brandButtons, TASKS, type Brand, type Task } from '../../../lib/brands';
-import { openersFor, openerHref, openerSlug, getLearnButton, remotesForOpener, remotesForButton, buyable, slugify, type Opener } from '../../../lib/data';
+import { openersFor, openerHref, openerSlug, getLearnButton, remotesForOpener, remotesForButton, buyable, slugify, openerGroup, openerLead, type Opener } from '../../../lib/data';
 
 type P =
   | { kind: 'task'; b: Brand; t: Task }
@@ -45,12 +45,17 @@ const openerTasks = o
     ].filter((x) => x.s && x.s.length)
   : [];
 
+const group = o ? openerGroup(o) : [];
+const lead = o ? openerLead(o) : null;
+const isLead = !!o && lead === o;
+const twins = group.filter((x) => x !== o);
+
 // Task page data
 const t = p.kind === 'task' ? p.t : null;
 const tSteps = t ? b.steps[t.key] ?? null : null;
 const title =
   p.kind === 'opener'
-    ? `${b.name} ${o!.model} Learn Button, Remotes & Programming`
+    ? `${b.name} ${isLead && twins.length ? [o!.model, ...twins.slice(0, 2).map((x) => x.model)].join(', ') + (twins.length > 2 ? ' & more' : '') : o!.model} Learn Button, Remotes & Programming`
     : p.kind === 'learn'
       ? `Where Is the Learn Button on a ${b.name} Garage Door Opener?`
       : `How to ${t!.verb.replace(/^./, (c) => c.toUpperCase())} for a ${b.name} Garage Door Opener`;
@@ -74,7 +79,7 @@ const jsonLd =
        ...(faq.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : [])]
     : undefined;
 ---
-<Base title={title} description={description} jsonLd={jsonLd}>
+<Base title={title} description={description} jsonLd={jsonLd} noindex={p.kind === 'opener' && !isLead}>
   {p.kind === 'opener' && o && (
     <>
       <section>
@@ -94,6 +99,8 @@ const jsonLd =
           </dl>
           {o.learn_button_location && <p><strong>Where it is:</strong> {o.learn_button_location}</p>}
           {o.also_sold_as && o.also_sold_as.length > 0 && <p class="small">Same opener as model{o.also_sold_as.length > 1 ? 's' : ''} <span class="mono">{o.also_sold_as.join(', ')}</span>, so these steps work for {o.also_sold_as.length > 1 ? 'those' : 'that one'} too.</p>}
+          {isLead && twins.length > 0 && <p class="small"><strong>Same steps for {twins.length} other {twins.length === 1 ? 'model' : 'models'}:</strong> {twins.map((x, i) => <>{i > 0 && ', '}<a class="mono" href={openerHref(x)}>{x.model}</a></>)}. They share this opener's Learn button, programming steps and compatible remotes.</p>}
+          {!isLead && lead && <p class="small"><strong>Programs exactly like the <a class="mono" href={openerHref(lead)}>{lead.model}</a></strong>{group.length > 2 ? ` and ${group.length - 2} other ${group.length - 2 === 1 ? 'model' : 'models'}` : ''}: same Learn button, steps and compatible remotes.</p>}
           <Source sample={o.sample} url={o.manual_url ?? o.source_url} label={`${b.name} ${o.model} owner's manual`} />
         </div>
       </section>
